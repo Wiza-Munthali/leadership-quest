@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A gamified study trail through the 13 sessions of the ALA 2026–27 first convening.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='5' fill='%23F4BD1E' stroke='%23171310' stroke-width='3' transform='rotate(-6 16 16)'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ALA Leadership Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Archivo:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a painted roadside — limewashed wall, signwriter boards with hard black outlines and drop shadows; the trail is a dirt road that gets tarred as stations are cleared. Single bright look by choice. */
+:root{
+  color-scheme:light;
+  --wall:#F1E1B8; --wall-2:#E6D19F; --board:#FFFCF1; --ink:#171310; --muted:#5B4F42;
+  --blue:#1F55B0; --red:#D0342A; --green:#1D8748; --yellow:#F4BD1E; --sky:#BFE0F2;
+  --dirt:#D6BC86; --tar:#2B2724;
+  --soft-green:#CFEBD8; --soft-red:#F8D4CF;
+  --f-display:"Bungee", "Arial Black", Impact, system-ui, sans-serif;
+  --f-body:"Archivo", "Segoe UI", system-ui, sans-serif;
+  --ol:3px solid var(--ink); --sh:5px 5px 0 var(--ink); --r:10px;
+}
+*{box-sizing:border-box}
+body{background:var(--wall);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(ellipse at 15% 20%,rgba(255,255,255,.45),transparent 45%),radial-gradient(ellipse at 85% 60%,rgba(150,105,40,.13),transparent 50%),radial-gradient(ellipse at 40% 95%,rgba(255,255,255,.3),transparent 40%),repeating-linear-gradient(97deg,rgba(90,60,20,.035) 0 3px,transparent 3px 11px);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--blue)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px dashed var(--red);outline-offset:3px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.1;text-wrap:balance;margin:0;letter-spacing:.01em}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--f-body);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* top bar: painted blue fascia */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--blue);border-bottom:4px solid var(--ink);box-shadow:0 4px 0 var(--yellow)}
+.bar .wrap{display:flex;align-items:center;gap:10px;padding-block:10px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-size:17px;background:none;border:0;padding:2px 0;color:#fff;text-shadow:2px 2px 0 var(--ink);display:flex;align-items:center;gap:8px}
+.brand i{width:20px;height:20px;background:var(--yellow);border:2px solid var(--ink);border-radius:4px;transform:rotate(-6deg);display:inline-block;box-shadow:2px 2px 0 var(--ink)}
+.stats{display:flex;gap:8px;margin-left:auto;align-items:center}
+.chip{font-weight:800;font-size:13px;padding:5px 10px;border-radius:6px;border:2px solid var(--ink);background:var(--board);display:flex;align-items:center;gap:6px;white-space:nowrap;font-variant-numeric:tabular-nums;box-shadow:2px 2px 0 var(--ink)}
+.chip.xp{background:var(--yellow)}
+.chip .meter{width:46px;height:8px;border-radius:2px;border:1.5px solid var(--ink);background:var(--board);overflow:hidden}
+.chip .meter b{display:block;height:100%;background:var(--red)}
+nav.tabs{display:flex;gap:6px;width:100%;overflow-x:auto;padding:2px 2px 4px}
+nav.tabs button{background:transparent;border:2px solid transparent;padding:5px 12px;border-radius:6px;font-family:var(--f-display);font-size:13px;color:#DCE7FA;white-space:nowrap}
+nav.tabs button[aria-current="page"]{background:var(--yellow);color:var(--ink);border-color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
+
+main{padding-block:26px 90px}
+
+/* shared board + button */
+.board{background:var(--board);border:var(--ol);border-radius:var(--r);box-shadow:var(--sh)}
+.btn{border:var(--ol);border-radius:8px;padding:10px 18px;font-family:var(--f-display);font-size:15px;background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:8px;box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.copper,.btn.light{background:var(--red);color:#fff;text-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:var(--board);color:var(--ink)}
+.btn:not(.ghost):not(.copper):not(.light){background:var(--blue);text-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* hero: the shop sign */
+.hero{background:var(--yellow);border:4px solid var(--ink);border-radius:12px;padding:26px 24px 24px;position:relative;
+  box-shadow:inset 0 0 0 9px var(--yellow),inset 0 0 0 13px var(--red),8px 8px 0 var(--ink)}
+.hero .strip{display:inline-block;background:var(--blue);color:#fff;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border:2px solid var(--ink);transform:rotate(-1.5deg);box-shadow:3px 3px 0 var(--ink)}
+.hero h1{font-size:clamp(34px,8vw,64px);color:var(--red);text-shadow:4px 4px 0 var(--ink);margin:14px 0 10px;line-height:.95}
+.hero h1 span{color:var(--blue);display:block}
+.hero p{max-width:52ch;margin:0;font-weight:500}
+.hero .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.stat{background:var(--board);border:var(--ol);border-radius:8px;padding:8px 14px;min-width:110px;box-shadow:3px 3px 0 var(--ink)}
+.stat:nth-child(2){transform:rotate(1deg)} .stat:nth-child(3){transform:rotate(-1deg)}
+.stat b{font-family:var(--f-display);font-size:22px;display:block;font-variant-numeric:tabular-nums;font-weight:400}
+.stat span{font-size:12.5px;font-weight:700;color:var(--muted)}
+
+/* trail: road */
+.trail{position:relative;margin-top:34px}
+.trail>svg{position:absolute;inset:0;width:100%;overflow:visible}
+.road{fill:none;stroke-width:34;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.road.edge{stroke:var(--ink);stroke-width:40}
+.road.todo{stroke:var(--dirt)} .road.done{stroke:var(--tar)}
+.lane{fill:none;stroke-width:3;stroke-dasharray:12 12;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.lane.todo{stroke:rgba(90,60,25,.35)} .lane.done{stroke:var(--yellow)}
+.camp{position:absolute;left:0;right:0;display:flex;justify-content:center;z-index:1}
+.camp>div{border:var(--ol);border-radius:8px;padding:8px 18px;text-align:center;box-shadow:var(--sh);color:#fff;transform:rotate(-1.2deg);max-width:92%}
+.camp .eyebrow{color:inherit;opacity:.85}
+.camp h3{font-size:18px;text-shadow:2px 2px 0 var(--ink)}
+.camp small{display:block;font-weight:600;font-size:13px}
+.a0{background:var(--blue)} .a1{background:var(--red)} .a2{background:var(--green)} .a3{background:var(--yellow);color:var(--ink)!important}
+.camp .a3 h3{text-shadow:2px 2px 0 #fff}
+.node{position:absolute;transform:translate(-50%,-31px);display:flex;flex-direction:column;align-items:center;width:min(160px,44vw);background:none;border:0;padding:0;text-align:center;z-index:2}
+.node .disc{width:70px;height:62px;border-radius:8px;display:grid;place-items:center;font-family:var(--f-display);font-size:26px;background:var(--board);border:var(--ol);box-shadow:4px 4px 0 var(--ink);transition:transform .15s}
+.node.c0 .disc{color:var(--blue)} .node.c1 .disc{color:var(--red)} .node.c2 .disc{color:var(--green)} .node.c3 .disc{color:#B8860B}
+.node.done .disc{color:#fff;text-shadow:2px 2px 0 var(--ink)}
+.node.done.c0 .disc{background:var(--blue)} .node.done.c1 .disc{background:var(--red)} .node.done.c2 .disc{background:var(--green)} .node.done.c3 .disc{background:var(--yellow);color:var(--ink);text-shadow:2px 2px 0 #fff}
+.node.started .disc{border-style:dashed}
+.node:hover .disc{transform:rotate(-4deg) scale(1.05)}
+.node .post{width:7px;height:12px;background:var(--ink)}
+.node.next .disc{animation:wobble 1.8s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+.node .lbl{font-weight:800;font-size:13px;line-height:1.2;background:var(--board);border:2px solid var(--ink);border-radius:5px;padding:3px 8px;box-shadow:2px 2px 0 var(--ink)}
+.stars{display:flex;gap:2px;justify-content:center;margin-top:5px}
+.stars svg{width:15px;height:15px}
+.stars .on{fill:var(--yellow);stroke:var(--ink);stroke-width:1.6} .stars .off{fill:rgba(60,40,15,.15);stroke:rgba(60,40,15,.35);stroke-width:1.2}
+
+/* station */
+.back{background:var(--board);border:2px solid var(--ink);border-radius:6px;font-weight:800;padding:4px 12px;margin-bottom:16px;box-shadow:2px 2px 0 var(--ink)}
+.st-head{display:flex;gap:16px;align-items:flex-start}
+.st-num{flex:none;width:66px;height:60px;border-radius:8px;display:grid;place-items:center;font-family:var(--f-display);font-size:26px;color:#fff;border:var(--ol);box-shadow:4px 4px 0 var(--ink);text-shadow:2px 2px 0 var(--ink);transform:rotate(-3deg)}
+.st-num.a3{text-shadow:2px 2px 0 #fff}
+.st-head h1{font-size:clamp(22px,4.4vw,32px);margin-top:4px}
+section.block{margin-top:34px}
+section.block>h2{font-size:19px;display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+section.block>h2 .tag{font-family:var(--f-body);font-size:11.5px;font-weight:800;letter-spacing:.1em;background:var(--ink);color:var(--yellow);padding:4px 9px;border-radius:4px;transform:rotate(-2deg)}
+.plain{font-size:18.5px;line-height:1.6;max-width:62ch;margin:0;font-weight:500}
+.hook{margin-top:16px;padding:14px 16px;border-radius:8px;background:var(--red);color:#fff;border:var(--ol);box-shadow:var(--sh);display:flex;gap:12px;align-items:flex-start;max-width:62ch;font-weight:600}
+.hook b{font-family:var(--f-display);font-weight:400;font-size:12px;color:var(--yellow);flex:none;padding-top:3px;text-shadow:1px 1px 0 var(--ink)}
+.src{font-size:13px;color:var(--muted);margin-top:14px;font-weight:500}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{display:block;width:100%;perspective:900px;background:none;border:0;padding:0;min-height:180px;text-align:left}
+.card .in{display:block;position:relative;width:100%;height:100%;min-height:180px;transition:transform .45s;transform-style:preserve-3d}
+.card.flip .in{transform:rotateY(180deg)}
+.card .f>*,.card .b>*{display:block}
+.card .f,.card .b{position:absolute;inset:0;border-radius:var(--r);padding:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;overflow:auto;border:var(--ol);box-shadow:var(--sh)}
+.card .f{color:#fff}
+.card.c0 .f{background:var(--blue)} .card.c1 .f{background:var(--red)} .card.c2 .f{background:var(--green)} .card.c3 .f{background:var(--yellow);color:var(--ink)}
+.card .f h3{font-size:18px;margin-top:auto;margin-bottom:auto;text-shadow:2px 2px 0 var(--ink)}
+.card.c3 .f h3{text-shadow:2px 2px 0 #fff}
+.card .f small{font-size:11.5px;font-weight:800;letter-spacing:.1em;opacity:.9}
+.card .b{background:var(--board);transform:rotateY(180deg);font-size:14.5px;line-height:1.45;gap:10px;font-weight:500}
+.card .b em{font-style:normal;font-weight:800;color:var(--blue);font-size:13.5px;border-top:2px dashed var(--ink);padding-top:8px}
+.card.seen .f small:first-child::after{content:" · SEEN ✓"}
+.card:nth-child(3n+1) .in{rotate:-.6deg} .card:nth-child(3n+2) .in{rotate:.5deg}
+@media (prefers-reduced-motion:reduce){.card .in{transition:none}.node.next .disc{animation:none}}
+
+details.case{background:var(--sky);border:var(--ol);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh)}
+details.case summary{font-family:var(--f-display);font-size:15px;cursor:pointer}
+details.case p{margin:10px 0 0;max-width:65ch;font-weight:500}
+
+/* quiz */
+.quiz{background:var(--board);border:var(--ol);border-radius:12px;padding:20px;box-shadow:7px 7px 0 var(--ink)}
+.pips{display:flex;gap:6px;margin-bottom:16px}
+.pips i{flex:1;height:10px;border-radius:3px;border:2px solid var(--ink);background:var(--board)}
+.pips i.ok{background:var(--green)} .pips i.meh{background:var(--yellow)} .pips i.cur{background:var(--ink)}
+.q{font-size:19px;font-weight:700;margin:0 0 14px;max-width:62ch}
+.qtype{font-weight:800;font-size:12px;letter-spacing:.12em;color:var(--red);text-transform:uppercase;margin-bottom:6px}
+.opts{display:grid;gap:10px}
+.opt{border:2.5px solid var(--ink);background:#fff;border-radius:8px;padding:12px 14px;text-align:left;font-size:15px;font-weight:600;line-height:1.4;box-shadow:3px 3px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.opt:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.opt.right{background:var(--soft-green);border-color:var(--green);box-shadow:3px 3px 0 var(--green)}
+.opt.wrong{background:var(--soft-red);border-color:var(--red);box-shadow:3px 3px 0 var(--red);text-decoration:line-through}
+.opt.sel{background:var(--yellow)}
+.opt:disabled{cursor:default}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match .col{display:grid;gap:10px;align-content:start;min-width:0}
+.opt .n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:4px;background:var(--red);color:#fff;border:2px solid var(--ink);font-size:11px;font-weight:800;margin-right:6px;vertical-align:1px}
+.order-ans{min-height:56px;border:2.5px dashed var(--ink);border-radius:8px;padding:8px;display:grid;gap:8px;margin-bottom:12px;background:var(--wall)}
+.order-ans:empty::before{content:"Tap the steps below in the right order";color:var(--muted);font-size:14px;font-weight:600;padding:8px}
+.feedback{margin-top:16px;padding:12px 14px;border-radius:8px;font-size:15px;max-width:65ch;border:2.5px solid var(--ink);font-weight:500}
+.feedback.good{background:var(--soft-green)} .feedback.bad{background:var(--soft-red)}
+.feedback b{display:block;margin-bottom:2px;font-family:var(--f-display);font-weight:400}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
+.done-card{text-align:center;padding:12px 4px}
+.done-card .big-stars{display:flex;justify-content:center;gap:8px;margin:12px 0}
+.done-card .big-stars svg{width:48px;height:48px}
+.done-card h3{font-size:22px}
+
+.move{background:var(--board);border:var(--ol);border-radius:12px;padding:20px;display:grid;gap:12px;box-shadow:var(--sh)}
+.move label{font-weight:800;font-size:14px;display:grid;gap:6px}
+.move textarea{font:inherit;font-size:15px;background:#fff;color:var(--ink);border:2.5px solid var(--ink);border-radius:6px;padding:10px 12px;resize:vertical;min-height:46px}
+.move .saved{color:var(--green);font-weight:800;font-size:14px}
+.next-row{display:flex;justify-content:space-between;gap:10px;margin-top:34px;flex-wrap:wrap}
+
+/* rapid fire */
+.rf{background:var(--board);border:4px solid var(--ink);border-radius:12px;padding:24px;max-width:640px;margin:0 auto;box-shadow:inset 0 0 0 8px var(--board),inset 0 0 0 11px var(--green),8px 8px 0 var(--ink)}
+.rf h1{color:var(--red);text-shadow:3px 3px 0 var(--ink)}
+.rf-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-family:var(--f-display);font-size:16px;font-variant-numeric:tabular-nums}
+.timer{height:14px;border-radius:4px;border:2.5px solid var(--ink);background:#fff;overflow:hidden;margin-bottom:18px}
+.timer b{display:block;height:100%;background:var(--red);transition:width .25s linear}
+.rf .from{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.flash-ok{animation:fok .4s} .flash-bad{animation:fbad .4s}
+@keyframes fok{30%{background:var(--soft-green)}} @keyframes fbad{30%{background:var(--soft-red)}}
+
+/* cheat sheet */
+.search{width:100%;font:inherit;font-weight:600;padding:12px 14px;border-radius:8px;border:var(--ol);background:#fff;color:var(--ink);margin:16px 0;box-shadow:3px 3px 0 var(--ink)}
+.sheet{display:grid;gap:18px}
+.sheet article{background:var(--board);border:var(--ol);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.sheet h3{font-size:16px;margin-bottom:8px;display:flex;gap:10px;align-items:baseline}
+.sheet h3 span{color:var(--red)}
+.sheet p{margin:0 0 10px;color:var(--muted);font-size:14.5px;font-weight:500}
+.sheet dl{display:grid;grid-template-columns:minmax(110px,auto) 1fr;gap:5px 14px;margin:0;font-size:14px}
+.sheet dt{font-weight:800}
+.sheet dd{margin:0;min-width:0}
+@media (max-width:520px){.sheet dl{grid-template-columns:1fr}.sheet dd{margin-bottom:6px}}
+
+/* progress */
+.page-h{font-size:clamp(28px,5.4vw,42px);margin:6px 0 8px;color:var(--red);text-shadow:3px 3px 0 var(--ink)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.badge{background:var(--board);border:var(--ol);border-radius:var(--r);padding:16px 12px;text-align:center;box-shadow:4px 4px 0 var(--ink)}
+.badge .hex{width:56px;height:56px;margin:0 auto 10px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-family:var(--f-display);font-size:18px;background:var(--wall-2);color:var(--muted)}
+.badge.on .hex{background:var(--red);color:#fff;text-shadow:2px 2px 0 var(--ink);box-shadow:inset 0 0 0 4px var(--yellow)}
+.badge b{display:block;font-size:14px;font-weight:800}
+.badge small{color:var(--muted);font-size:12.5px;line-height:1.35;display:block;margin-top:2px}
+.badge:not(.on){opacity:.65;box-shadow:none;border-style:dashed}
+.journal{display:grid;gap:12px}
+.journal article{background:var(--board);border:var(--ol);border-radius:var(--r);padding:14px 16px;box-shadow:4px 4px 0 var(--ink)}
+.journal h3{font-size:14px;margin-bottom:6px}
+.journal p{margin:2px 0;font-size:14.5px}
+.journal p span{color:var(--muted);font-weight:700}
+.ranks{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.ranks span{font-size:12.5px;font-weight:800;padding:4px 10px;border-radius:5px;border:2px solid var(--ink);background:var(--board);color:var(--muted)}
+.ranks span.on{background:var(--green);color:#fff}
+
+/* toast + modal */
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;display:grid;gap:8px;justify-items:center;pointer-events:none;width:min(92vw,420px)}
+.toast{background:var(--yellow);color:var(--ink);border:var(--ol);padding:8px 16px;border-radius:8px;font-family:var(--f-display);font-size:14px;animation:tin .25s;box-shadow:4px 4px 0 var(--ink)}
+@keyframes tin{from{transform:translateY(10px) rotate(-3deg);opacity:0}}
+.modal{position:fixed;inset:0;background:rgba(23,19,16,.6);display:grid;place-items:center;z-index:60;padding:16px}
+.modal>div{background:var(--yellow);border:4px solid var(--ink);border-radius:12px;padding:26px 22px;max-width:360px;width:100%;text-align:center;box-shadow:inset 0 0 0 8px var(--yellow),inset 0 0 0 11px var(--red),8px 8px 0 var(--ink)}
+.modal .hex{width:80px;height:80px;margin:0 auto 12px;border-radius:50%;border:4px solid var(--ink);display:grid;place-items:center;font-family:var(--f-display);font-size:26px;background:var(--red);color:#fff;text-shadow:2px 2px 0 var(--ink);box-shadow:inset 0 0 0 5px var(--board)}
+.modal h3{font-size:20px;margin-bottom:6px}
+.modal p{margin:0 0 16px;font-weight:600}
+@media (max-width:560px){
+  .hero{padding:22px 18px}
+  .match{grid-template-columns:1fr}
+  .match .col.r{border-top:2.5px dashed var(--ink);padding-top:12px}
+  .stats .chip.streak{display:none}
+  .road{stroke-width:26}.road.edge{stroke-width:31}
+}
+
+/* match pairs */
+.mhelp{margin:-4px 0 12px;font-size:14px;color:var(--muted);font-weight:600}
+.opt.mt{display:flex;align-items:center;gap:10px}
+.opt.mt .tx{flex:1;min-width:0}
+.pt{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:6px;border:2.5px solid var(--ink);font-family:var(--f-display);font-size:14px;color:#fff;text-shadow:1px 1px 0 var(--ink)}
+.pt.empty{background:#fff;color:var(--muted);border-style:dashed;text-shadow:none}
+.p0{--pc:#1F55B0;--pt:#D6E3F7} .p1{--pc:#D0342A;--pt:#F9DAD5} .p2{--pc:#1D8748;--pt:#D3EEDD} .p3{--pc:#E0A800;--pt:#FCEFC2} .p4{--pc:#7B3FB2;--pt:#E9DCF5} .p5{--pc:#E0661B;--pt:#FBE0CD}
+.pt.p0,.pt.p1,.pt.p2,.pt.p3,.pt.p4,.pt.p5{background:var(--pc)}
+.opt.paired{background:var(--pt);border-color:var(--pc);border-left-width:10px;box-shadow:3px 3px 0 var(--pc)}
+.opt.picking{background:var(--yellow);outline:3px dashed var(--ink);outline-offset:2px}
+.opt.picking::after{content:"→";font-family:var(--f-display);font-size:18px}
+.opt.lock{opacity:1;cursor:default}
+.res{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:16px;color:#fff;border:2.5px solid var(--ink)}
+.res.ok{background:var(--green)} .res.bad{background:var(--red)}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.pairs-done{display:grid;gap:10px}
+.pairs-done .pr{display:grid;grid-template-columns:auto minmax(0,auto) auto minmax(0,1fr);align-items:center;gap:10px;background:var(--soft-green);border:2.5px solid var(--green);border-radius:8px;padding:10px 12px;box-shadow:3px 3px 0 var(--green);font-size:15px}
+.pairs-done .arr{font-family:var(--f-display);color:var(--green)}
+@media (max-width:560px){.pairs-done .pr{grid-template-columns:auto 1fr}.pairs-done .arr{display:none}.pairs-done .pr>span:last-child{grid-column:2}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <button class="brand" data-go="trail"><i></i>Leadership Quest</button>
+    <div class="stats">
+      <span class="chip streak" id="streakChip" title="Day streak">0 day streak</span>
+      <span class="chip xp" id="xpChip"><span id="xpNum">0 XP</span><span class="meter"><b id="xpMeter" style="width:0"></b></span></span>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <button data-go="trail">Trail</button>
+      <button data-go="rapid">Rapid Fire</button>
+      <button data-go="sheet">Cheat Sheet</button>
+      <button data-go="progress">Progress</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div id="modalRoot"></div>
+
+<script>
+/* ---------------- CONTENT ---------------- */
+const ARCS=[
+ {name:"Know yourself",sub:"Mindset, values, inner voice, your story"},
+ {name:"Lead with others",sub:"Shared purpose, trust, roles"},
+ {name:"Work well together",sub:"Feedback, safety, peers, up/down/across"},
+ {name:"From story to action",sub:"Public narrative and goals"}
+];
+const S=[
+{id:1,arc:0,short:"Mindtraps",title:"Authentic Leadership: Mindsets & Mindtraps",
+plain:"Authentic leadership means being true to your values while staying curious about how you affect other people. Mindtraps are five thinking habits that feel sensible but quietly stop you learning. Each one has a question that unlocks it.",
+hook:"A mindtrap is a shortcut your brain trusts too much. When you notice one, ask its unlock question.",
+src:"Framework: Jennifer Garvey Berger, Unlocking Leadership Mindtraps (2019).",
+cards:[
+ {k:"Authentic leadership",d:"Self-awareness, honesty and ethical relationships. Saying “I'm just being myself” isn't enough. It also means caring about your impact and being willing to adapt.",q:"How is my behaviour landing on others?"},
+ {k:"Rightness",d:"Being so sure you're right that you stop looking. Certainty closes the door on learning.",q:"What evidence could change my view?"},
+ {k:"Simple stories",d:"One tidy explanation that hides other people, perspectives or constraints.",q:"What else might explain this? Whose account haven't I heard?"},
+ {k:"Agreement",d:"Keeping the peace so an important difference never gets said out loud.",q:"How can I make room for a different view?"},
+ {k:"Control",d:"Acting as if you can control results that actually depend on other people and changing conditions.",q:"What can I influence or enable? What must I monitor?"},
+ {k:"Ego",d:"Holding tightly to how you see yourself, so change feels like a threat.",q:"What kind of leader do I need to become here?"}
+],
+cs:{name:"Peter and Nandi's SMS pilot",text:"Peter wants to launch SMS appointment reminders next week: the team is ready, training is planned and the funder expects an update. Nandi heard from community health volunteers that people share phones, may not read English, and may not want family to see health messages. They must agree a recommendation; their manager makes the final call."},
+quiz:[
+ {t:"mcq",q:"A leader brushes off complaints about insensitive jokes: “I'm just being myself.” Which part of authentic leadership is missing?",o:["Curiosity about their impact and willingness to adapt","Confidence in their own style","A stronger personal brand","Clearer rules for the team"],a:0,w:"Authenticity includes self-awareness and ethical relationships. Being yourself without caring how it lands on others isn't authentic leadership."},
+ {t:"match",q:"Pair each mindtrap with the question that unlocks it.",p:[["Rightness","What evidence could change my view?"],["Simple stories","What else might explain this?"],["Agreement","How can I make room for a different view?"],["Control","What can I influence or enable?"],["Ego","What kind of leader do I need to become here?"]],w:"Learn these five questions and you carry the whole framework with you."},
+ {t:"mcq",q:"Peter: “People miss appointments because they forget. SMS fixes that. Simple.” Which mindtrap is showing?",o:["Simple stories","Rightness","Agreement","Control"],a:0,w:"One neat explanation (forgetting) hides the other barriers Nandi heard about: shared phones, language and privacy."},
+ {t:"mcq",q:"Nandi has doubts but stays quiet in the planning meeting so she won't cause tension. Which mindtrap?",o:["Agreement","Ego","Simple stories","Control"],a:0,w:"Keeping the peace leaves an important difference unspoken. That's the Agreement trap."},
+ {t:"mcq",q:"Which is a genuine inquiry question Peter could ask Nandi?",o:["What did the volunteers say that worries you most?","Don't you think the team is ready?","Why do you keep slowing us down?","Can we just agree to run the pilot?"],a:0,w:"A genuine question invites an answer you don't already know. The others steer, blame or close the conversation."},
+ {t:"mcq",q:"Their manager makes the final decision. What should Peter and Nandi aim to bring?",o:["A shared recommendation that names what needs learning and whose input matters","Whichever view wins the argument","Nothing until they fully agree","A plan that skips the manager to save time"],a:0,w:"Stay within your role: agree a recommendation, name the learning needed and respect who decides."}
+],
+move:{prompt:"Turn one unlock question into a habit.",f:["When I notice…","I will…","so that…"]}},
+
+{id:2,arc:0,short:"Vision & Values",title:"Vision, Values & Human-Centred Design",
+plain:"Values are what you care about, shown through choices other people can see. A leadership vision is the future you want to help build and your part in it. Human-Centred Design (HCD) keeps good intentions honest: you learn from the people you serve before deciding on a solution.",
+hook:"Values are your compass. HCD is asking the people who live there for directions before you start walking.",
+src:"Optional resource: IDEO.org, What is human-centred design?",
+cards:[
+ {k:"Value in action",d:"A value only becomes visible through choices. If a colleague watched you, what would they have seen or heard?",q:"When did a value matter enough to change a choice?"},
+ {k:"Values in tension",d:"Values can pull against other priorities, like care against a deadline. Naming the tension is part of leading.",q:"Which priority competed with my value?"},
+ {k:"Leadership vision",d:"Three parts: what you care about, which community you want to serve, and the future you could help make possible.",q:"What could I contribute?"},
+ {k:"Human-Centred Design",d:"Stay curious, listen to lived experience, test whether an approach fits the people it's for, and let them shape it.",q:"Is this relevant to the people it aims to serve?"},
+ {k:"The inquiry question",d:"“Tell me about the last time you tried to use this service.” A real, recent experience reveals real barriers.",q:"What could I learn before choosing a solution?"},
+ {k:"How it connects",d:"Values decide what matters. HCD learns from people's experience. Collective leadership brings people's knowledge and influence into shared work.",q:"Which of the three am I weakest at?"}
+],
+cs:{name:"An everyday example",text:"You want to build an app to help patients book clinic visits. Before writing a line of code, HCD says: sit with patients and ask about the last time they tried to book. You may learn the problem is the queue, the phone network or the language, not the booking itself."},
+quiz:[
+ {t:"mcq",q:"Which shows the value of integrity in action?",o:["Telling a funder about an error in your data, even though it delays the report","Listing “integrity” in your email signature","Agreeing with whoever is most senior","Promising yourself you'll be more honest next year"],a:0,w:"Values show in choices others can see, especially when the choice costs you something."},
+ {t:"mcq",q:"You're designing an appointment app. Which question follows HCD best?",o:["Tell me about the last time you tried to book a clinic visit.","Would you use an app for appointments?","Don't you think an app would be easier?","How many stars would you give our idea?"],a:0,w:"Asking about a real, recent experience surfaces actual barriers. “Would you…” invites polite guesses."},
+ {t:"match",q:"Match each idea to its job.",p:[["Values","Decide what matters"],["Human-Centred Design","Learn from people's lived experience"],["Collective leadership","Bring people's knowledge and influence into shared work"]],w:"The session chained these three: values, then learning with people, then acting together."},
+ {t:"mcq",q:"Which is NOT one of the three ingredients of a leadership vision from the session?",o:["Your next job title","What you care about","The community you want to serve","The future you could help make possible"],a:0,w:"A vision is about care, community and contribution, not position."},
+ {t:"mcq",q:"Equity, inclusion and dignity…",o:["may look different from another person's perspective, so you ask","mean the same thing to everyone","are mainly the funder's concern","can be captured by a single indicator"],a:0,w:"This is why HCD matters: your idea of dignity may not match the lived experience of the people you serve."}
+],
+move:{prompt:"Pick the value you'll bring more intentionally.",f:["The value I'll bring more intentionally","How I'll learn what it looks like to the people I serve","My first step"]}},
+
+{id:3,arc:0,short:"Self-Compassion",title:"Self-Trust & Self-Compassion",
+plain:"Self-trust is confidence that you can act with integrity, learn and ask for help. Self-compassion means meeting a setback the way you'd support a colleague you respect: kindly and honestly. It doesn't lower your standards. It makes it safe to look closely at what went wrong.",
+hook:"Talk to yourself the way you'd talk to a good colleague who slipped up: warm, honest, and with a plan.",
+src:"Three elements adapted from Kristin Neff.",
+cards:[
+ {k:"Self-trust",d:"Confidence that you can act with integrity, learn and seek help, even in a difficult moment.",q:"What would that confidence look like right now?"},
+ {k:"Self-kindness",d:"Responding to yourself with care instead of attack.",q:"How can I respond to myself with care?"},
+ {k:"Common humanity",d:"Setbacks are part of being human. You are not the only one.",q:"Can I remember I'm not alone in this?"},
+ {k:"Mindfulness",d:"Noticing what you feel without exaggerating it or ignoring it.",q:"What am I experiencing right now?"},
+ {k:"The compassionate pause",d:"Notice what happened and how you're reacting. Acknowledge that this is hard and that difficulty is human. Respond with kind words and a useful next step.",q:"What would I say to a colleague?"},
+ {k:"Facts vs verdicts",d:"“The report was late” is a fact. “I'm not capable of leading” is a verdict on your whole self. Fix the fact; drop the verdict.",q:"What needs repair, learning or a different decision?"}
+],
+cs:{name:"Nandi's setback (Malawi)",text:"Nandi manages an outreach team. A monitoring report went in late after a colleague's absence and a new template, and she delayed asking her supervisor which tasks came first. The supervisor wants a recovery plan. Nandi thinks: “I'm letting everyone down; perhaps I'm not capable of leading.”"},
+quiz:[
+ {t:"mcq",q:"Nandi thinks, “Perhaps I'm not capable of leading this team.” What's the problem with this thought?",o:["It turns one event into a verdict about her whole self","It's too optimistic","It blames her colleague","Nothing, it's simply a fact"],a:0,w:"A missed deadline describes an event, not her whole ability."},
+ {t:"match",q:"Match each element of self-compassion to its question.",p:[["Self-kindness","How can I respond to myself with care?"],["Common humanity","Others face setbacks too. Am I really alone?"],["Mindfulness","What am I experiencing right now?"]],w:"Kindness, common humanity, mindfulness: Kristin Neff's three elements."},
+ {t:"order",q:"Put the compassionate pause in order.",i:["Notice: what happened and how am I reacting?","Acknowledge: this is difficult, and difficulty is human","Respond: kind words and a useful next step"],w:"Notice, Acknowledge, Respond. Feeling first, then action."},
+ {t:"mcq",q:"Which response is both kind AND accountable?",o:["“This is hard. One late report doesn't define me. I waited too long to ask about priorities, so I'll share a realistic recovery plan today.”","“It wasn't my fault. The template changed.”","“I'm useless. I always let people down.”","“Let's not talk about it.”"],a:0,w:"It names the feeling, avoids a whole-self verdict, owns the part she controlled and commits to repair."},
+ {t:"mcq",q:"True or false: self-compassion means lowering your standards.",o:["False: it helps you keep standards by making mistakes safe to examine","True: it's about going easy on yourself"],a:0,w:"Harsh self-criticism makes people hide mistakes. Compassion lets you look at them and fix them."}
+],
+move:{prompt:"Plan your response to the next setback.",f:["One action within my influence","One support or boundary I need","When I'll use the pause"]}},
+
+{id:4,arc:0,short:"Story of Self",title:"Leadership Storytelling: Story of Self",
+plain:"Story of Self is a short, true story about one moment that shows why you lead. You tell it in six steps and end with what you want your listener to think, feel or do. Ordinary moments work. They don't need to be dramatic.",
+hook:"Don't tell people your values. Show them the moment you chose them.",
+src:"Truth Be Told six-step storytelling framework.",
+cards:[
+ {k:"1 · Setting",d:"Where and when are we? Just enough context to understand the moment.",q:"Can I set the scene in one or two sentences?"},
+ {k:"2 · Issue",d:"The problem, challenge, inequity or opportunity.",q:"What was at stake?"},
+ {k:"3 · Conflict",d:"The obstacle, tension or dilemma that made it hard.",q:"What made this difficult?"},
+ {k:"4 · Lightning Bolt",d:"The moment your understanding changed, or you realised change was needed.",q:"When did it click?"},
+ {k:"5 · Resolution",d:"What you did, what became possible, or what you learned. Keep it truthful.",q:"What did I actually do?"},
+ {k:"6 · Closure & Ask",d:"What should the listener think, feel, do or consider next?",q:"What do I want from this audience?"},
+ {k:"Story circle feedback",d:"Name one specific moment that worked. Ask one clarifying question. Offer one suggestion, with permission.",q:"Am I respecting the storyteller's boundaries?"}
+],
+cs:{name:"Moments worth exploring",text:"A time you changed your mind. A leadership decision you wrestled with. A moment someone challenged your assumptions. A time you advocated for someone. A small act of courage. Pick one, choose an audience, and map it to the six steps."},
+quiz:[
+ {t:"order",q:"Put the six Truth Be Told steps in order.",i:["Setting","Issue","Conflict","Lightning Bolt","Resolution","Closure & Ask"],w:"Context and tension first (Setting, Issue, Conflict), then change and invitation (Lightning Bolt, Resolution, Closure & Ask)."},
+ {t:"mcq",q:"“That's when it hit me: our clinic numbers looked great because they never counted the people who couldn't get there.” Which step is this?",o:["Lightning Bolt","Setting","Conflict","Resolution"],a:0,w:"The moment understanding shifts is the Lightning Bolt."},
+ {t:"mcq",q:"“So next time you see a perfect dashboard, ask who's missing from it.” Which step?",o:["Closure & Ask","Issue","Lightning Bolt","Resolution"],a:0,w:"It tells the audience what to do or consider next."},
+ {t:"mcq",q:"A peer finishes their story. Which feedback helps most?",o:["“The moment you stayed after the clinic closed really showed your value. Could I suggest a shorter intro?”","“That was nice!”","“You should tell a different story.”","“I'd have done it differently.”"],a:0,w:"Specific praise plus one suggestion offered with permission. Vague praise gives them nothing to work with."},
+ {t:"mcq",q:"Your story involves a colleague's personal situation. What do you do?",o:["Protect their privacy and keep only details that make your choice clear","Use their full name so it feels authentic","Drop the story entirely","Add drama to make it memorable"],a:0,w:"You own your story, but other people's details aren't yours to share."}
+],
+move:{prompt:"Choose a story to keep developing (it feeds Why I Lead).",f:["The moment I'll tell","My audience","Where I could use this story next"]}},
+
+{id:5,arc:1,short:"Collective Leadership",title:"Introduction to Collective Leadership",
+plain:"Health-system problems are too big for one person or organisation. Collective leadership means people in different roles share a purpose, influence decisions and take responsibility for coordinated action. It doesn't remove the boss: formal authority still matters, so everyone knows who decides.",
+hook:"No one holds all the puzzle pieces. Your job is to get the right pieces onto the table.",
+src:"Foundation: WHO/Alliance, Open Mindsets: Participatory Leadership for Health.",
+cards:[
+ {k:"Working definition",d:"People with different roles share purpose, influence decisions and take responsibility for coordinated action.",q:"Who shares this purpose with me?"},
+ {k:"Map four things",d:"Who has knowledge? Who has authority? Who has resources? Who has lived experience?",q:"Which of the four am I missing?"},
+ {k:"Missing perspectives",d:"The people most affected are often the ones not in the room, such as those who stopped using a service.",q:"Whose perspective is missing, and how can I include it?"},
+ {k:"Power still matters",d:"Collective doesn't mean leaderless. It means negotiating differences and power while respecting formal authority and individual responsibility.",q:"Who convenes, and who decides?"},
+ {k:"Close the loop",d:"Show people what happened to their input. If they never hear back, they stop contributing.",q:"How will people see the effect of their input?"}
+],
+cs:{name:"Climate-resilient outreach (Uganda)",text:"A district health team and a local NGO want to change outreach schedules. Clinicians know service requirements, the NGO manages a small transport budget, community reps understand local barriers. Seasonal flooding makes roads impassable. Volunteers, people in paid work and people who stopped attending haven't all been heard. The district lead must approve changes."},
+quiz:[
+ {t:"match",q:"Uganda case: match each actor to what they bring.",p:[["Clinical staff","Knowledge of service requirements"],["Local NGO","The transport budget"],["Community representatives","Understanding of local barriers"],["District lead","Authority to approve changes"]],w:"Knowledge, resources, lived experience, authority: no single actor has all four."},
+ {t:"mcq",q:"In the Uganda case, whose voice is clearly missing so far?",o:["People who have stopped attending services","The district lead","Clinical staff","The NGO"],a:0,w:"The people most affected by the change haven't been heard yet."},
+ {t:"mcq",q:"Does collective leadership mean nobody is in charge?",o:["No. Formal authority and individual responsibility still matter","Yes, everything is decided by consensus","Yes, the community decides everything","Only during emergencies"],a:0,w:"You share purpose and influence, but someone still holds the decision."},
+ {t:"mcq",q:"Why plan how people will hear back about their input?",o:["It builds trust, so people keep contributing","It's a reporting requirement","It speeds up approvals","It isn't really necessary"],a:0,w:"Closing the loop turns a one-off consultation into a lasting relationship."},
+ {t:"mcq",q:"Flooding makes roads impassable. Which first step is most collective?",o:["Convene clinicians, the NGO, community reps and affected people to map options before the district lead decides","The NGO quietly changes the schedule","Wait for the dry season","Ask the funder for a new vehicle"],a:0,w:"Bring the knowledge, resources, lived experience and authority together, then decide."}
+],
+move:{prompt:"Name one relationship to strengthen.",f:["A challenge at work","One relationship to strengthen","How I'll include a missing perspective"]}},
+
+{id:6,arc:1,short:"Core Concerns",title:"Negotiating Relationships",
+plain:"Many tense conversations aren't really about the task. They're about human needs that feel ignored. The five core concerns are a checklist of those needs. Separate what you observed from what you assumed, ask what matters to the other person, and agree one realistic next step.",
+hook:"Before arguing the plan, check the person. Do they feel unappreciated, left out, overruled, overlooked or unclear on their part?",
+src:"Five core concerns: Fisher & Shapiro, Harvard Negotiation Project.",
+cards:[
+ {k:"Appreciation",d:"Recognition of your perspective and contribution.",q:"Has their work been acknowledged?"},
+ {k:"Affiliation",d:"Connection and inclusion. Feeling part of the group.",q:"Were they included?"},
+ {k:"Autonomy",d:"An appropriate say in decisions that affect you.",q:"Did they get a say?"},
+ {k:"Status",d:"Recognition of your standing and expertise.",q:"Is their expertise being respected?"},
+ {k:"Role",d:"A meaningful and clear part to play.",q:"Do they know their part, and does it matter?"},
+ {k:"An opening that works",d:"“When ___ happened, the effect was ___. I'd like to understand ___. Could we agree ___?”",q:"Have I stated an observation, not a motive?"},
+ {k:"Aim small",d:"Leadership isn't winning every interaction. Aim for one feasible next step within each person's authority.",q:"What can we agree now, and what needs approval?"}
+],
+cs:{name:"Amani and Peter's timetable",text:"Amani (NGO) circulated an outreach timetable, built with community volunteers, before the district review. Peter (district planning officer) must check it against staff capacity and existing services. Flooding disrupts visits, transport funding is fixed, neither can approve extra staff, and the timetable isn't authorised yet."},
+quiz:[
+ {t:"match",q:"Match each core concern to what it means.",p:[["Appreciation","Recognition of perspective and contribution"],["Affiliation","Connection and inclusion"],["Autonomy","An appropriate say in decisions"],["Status","Recognition of standing and expertise"],["Role","A meaningful, clear part to play"]],w:"Remember them with the initials A-A-A-S-R."},
+ {t:"mcq",q:"“The volunteers spent weeks on this timetable and nobody has even thanked them.” Which concern?",o:["Appreciation","Status","Role","Autonomy"],a:0,w:"Their contribution hasn't been recognised."},
+ {t:"mcq",q:"“This timetable went out before I had any say in it.” Which concern?",o:["Autonomy","Affiliation","Appreciation","Role"],a:0,w:"Autonomy is about having an appropriate say in decisions that affect you."},
+ {t:"mcq",q:"“I've run district planning for 15 years. My expertise should count here.” Which concern?",o:["Status","Affiliation","Appreciation","Autonomy"],a:0,w:"Status is recognition of standing and expertise."},
+ {t:"order",q:"Build the opening sentence in order.",i:["When ___ happened,","the effect was ___.","I'd like to understand ___.","Could we agree ___?"],w:"Observation, effect, curiosity, request. No motives assigned."},
+ {t:"mcq",q:"What's a realistic goal for Amani and Peter's conversation?",o:["Agree one review step: what to check, who helps, when to reconnect","Get the full timetable approved today","Win Peter over to Amani's plan","Request more staff"],a:0,w:"Neither can approve staff or the full plan. One feasible step within their authority is a win."}
+],
+move:{prompt:"Prepare a real conversation.",f:["The observation and need I'll state","The question I'll ask first","What needs someone else's approval"]}},
+
+{id:7,arc:1,short:"Social Change Roles",title:"Roles in Social Change",
+plain:"Social change works like an ecosystem. Different people play different roles around shared values like equity, justice and solidarity. Nobody plays every role, and the role you're needed in changes with the situation. Knowing your usual role shows you what you bring and who you need beside you.",
+hook:"A football team of only strikers loses. Change needs every position on the pitch.",
+src:"Adapted from Deepa Iyer, Social Change Ecosystem Framework (Building Movement Project).",
+cards:[
+ {k:"Frontline Responders",d:"Mobilise resources, networks and messages when a crisis hits.",q:"Who moves first in an emergency?"},
+ {k:"Visionaries",d:"Imagine bold possibilities and remind everyone of the direction.",q:"Where are we going?"},
+ {k:"Builders",d:"Organise and implement ideas, people and resources.",q:"How do we make it real?"},
+ {k:"Disrupters",d:"Take uncomfortable, risky actions to shake up the status quo.",q:"What pattern needs challenging?"},
+ {k:"Caregivers",d:"Sustain people through care, joy and connection.",q:"Who's looking after the team?"},
+ {k:"Experimenters",d:"Innovate, take risks and course-correct.",q:"What can we try?"},
+ {k:"Weavers",d:"See and strengthen the connections between people, places and efforts.",q:"Who should meet whom?"},
+ {k:"Storytellers",d:"Share community stories, experiences and possibilities.",q:"How do people come to understand this?"},
+ {k:"Healers",d:"Tend to current and generational harm caused by systems.",q:"What harm needs repair?"},
+ {k:"Guides",d:"Teach, counsel and advise from earned experience.",q:"Who can offer wisdom here?"}
+],
+cs:{name:"Access to care (Malawi)",text:"A coalition wants to know why some people with disabilities find an outpatient service hard to use. A facility manager, a disability-led organisation, an NGO and a district representative are involved. At the first meeting people focus on a new ramp, while others raise communication, dignity and the appointment process. Flooding makes the facility hard to reach. No agreed solution, no new funding, and people who stopped attending haven't been consulted."},
+quiz:[
+ {t:"match",q:"Match the first five roles.",p:[["Frontline Responders","Mobilise in urgent need"],["Visionaries","Imagine a bold direction"],["Builders","Organise implementation"],["Disrupters","Take risky action against the status quo"],["Caregivers","Sustain people and connection"]],w:"Responding and building roles."},
+ {t:"match",q:"Match the other five roles.",p:[["Experimenters","Try, adapt and course-correct"],["Weavers","Connect people and efforts"],["Storytellers","Communicate meaning and experience"],["Healers","Tend to harm and trauma"],["Guides","Offer counsel from experience"]],w:"Connecting and learning roles."},
+ {t:"mcq",q:"Malawi case: the first meeting focuses on installing a ramp. What's the risk?",o:["Jumping to one solution before hearing about communication, dignity and appointments, or from people who stopped attending","Ramps are too expensive","The district won't approve it","There's no risk, ramps solve access"],a:0,w:"That's a Simple Story mindtrap at coalition scale. Missing roles and missing voices lead to a narrow fix."},
+ {t:"mcq",q:"You introduce the disability-led organisation to the facility manager and set up their first meeting. Which role are you playing?",o:["Weaver","Disrupter","Healer","Visionary"],a:0,w:"Weavers see and strengthen the connections between people and efforts."},
+ {t:"mcq",q:"Why treat your role as an example rather than a permanent label?",o:["The contribution needed changes with context, and people play several roles","Labels are impolite","GHC assigns roles","It makes no difference"],a:0,w:"You might be a Builder at work and a Caregiver in your pod. Context decides."}
+],
+move:{prompt:"Notice your role and the one you need.",f:["The role I often take","A role I need to value or invite more","A tension we'd need to discuss"]}},
+
+{id:8,arc:2,short:"Feedback",title:"Giving & Receiving Feedback Well",
+plain:"Good feedback describes what happened and why it matters, then opens a conversation. It doesn't judge the person. Receiving feedback well means staying curious while keeping your own judgement: you decide what to accept, test or challenge.",
+hook:"Describe what a camera would have recorded, not your verdict on the person.",
+src:"Triggers and switchtracking: Stone & Heen, Thanks for the Feedback.",
+cards:[
+ {k:"SBIN",d:"Situation (the specific context) → Behaviour (what you observed) → Impact (why it matters, who's affected) → Next steps (invite dialogue, agree a way forward).",q:"Did I describe behaviour, not character?"},
+ {k:"Requirement, assumption or preference?",d:"Before giving feedback, check: is this a real work requirement, an assumption about why it happened, or just my preference?",q:"Which one is this?"},
+ {k:"Truth trigger",d:"“Is this feedback even accurate?” Respond by asking for an example.",q:"Can we look at the example together?"},
+ {k:"Relationship trigger",d:"“Why are you speaking to me this way?” You react to who gave it or how.",q:"Can we discuss the concern and how it was raised?"},
+ {k:"Identity trigger",d:"“What does this say about me?” Feedback shakes your sense of self.",q:"Can I take a moment, then ask what change is wanted?"},
+ {k:"Switchtracking",d:"Two people talking about two different topics as if they were one. Fix: name the shift, acknowledge both concerns, agree an order.",q:"Are we discussing two issues?"}
+],
+cs:{name:"Nandi and Peter's data sheet (Zambia)",text:"Peter circulated a planning sheet. Nandi noticed two site totals didn't match the source log, so the team paused transport allocation. Nandi opened with “You are careless with data.” Peter replied that she'd sent a new template and ignored his question. Later context: Peter did transfer two totals wrongly, Nandi never answered his question, and a late update made the source log differ."},
+quiz:[
+ {t:"order",q:"Put SBIN in order.",i:["Situation: name the specific context","Behaviour: describe what you observed","Impact: why it matters and who is affected","Next steps: invite dialogue and agree a way forward"],w:"S-B-I-N. Context, observation, effect, conversation."},
+ {t:"mcq",q:"Nandi says, “You are careless with data.” What's the problem?",o:["It's a judgement about Peter, not an observable behaviour","It's too long","It's too polite","Nothing, it's accurate"],a:0,w:"“Two totals differ from the source log” is observable. “Careless” is a verdict, and it triggers defensiveness."},
+ {t:"match",q:"Match each feedback trigger to the thought behind it.",p:[["Truth trigger","“Is this feedback even accurate?”"],["Relationship trigger","“Why are you speaking to me this way?”"],["Identity trigger","“What does this say about me?”"]],w:"Knowing which trigger fired helps you respond instead of react."},
+ {t:"mcq",q:"Nandi wants to talk about the figures; Peter wants to talk about the template and being blamed. This is…",o:["Switchtracking","The Agreement mindtrap","A status concern","Stonewalling"],a:0,w:"Two topics on one track: the work concern and the relationship concern."},
+ {t:"mcq",q:"What's the best way to handle it?",o:["Name the shift, acknowledge both concerns and agree an order to discuss them","Insist on discussing only the figures","Drop the figures to keep the peace","End the meeting"],a:0,w:"“We need to resolve the figures, and I want to understand your concern about how I raised it. Figures first, then how we handle this next time?”"},
+ {t:"match",q:"Sort each statement.",p:[["“Figures must match the source log before we allocate transport.”","Work requirement"],["“Peter probably rushed it.”","Assumption"],["“I like totals in bold.”","Preference"]],w:"Only the work requirement belongs at the centre of the feedback."}
+],
+move:{prompt:"Ask someone for feedback on one behaviour.",f:["One behaviour I'll ask someone to observe","Who I'll ask, and when","What support or boundary would help"]}},
+
+{id:9,arc:2,short:"Psychological Safety",title:"Mental Health in the Workplace",
+plain:"Mental health at work is how people think, feel, cope with stress and relate to others. Psychological safety is a team's shared belief that it's safe to speak up, ask questions, admit mistakes and ask for help. Your stress habits as a leader shape that climate, so know your under-pressure style and how to pivot out of it.",
+hook:"Your team doesn't remember your good days. It remembers who you are 24 hours before a deadline.",
+src:"Session by Kalunga Chalungumana, StrongMinds Zambia (GHC 2025–26 alum). Uses the DISC styles.",
+cards:[
+ {k:"Psychological safety",d:"A shared belief that people can speak up, ask questions, share ideas, admit mistakes and seek help without fear of blame or punishment.",q:"Would my team tell me bad news early?"},
+ {k:"The 24-hour rule",d:"Your under-pressure default, not your good-day style, sets your team's mental climate.",q:"What did my team see at my last deadline?"},
+ {k:"D · Driver",d:"Strength: clear standards. Under stress: blunt, impatient, barks orders, so the team goes silent and hides mistakes. Pivot: the 10-second silence. Count to ten so others speak first.",q:"Am I letting others talk first?"},
+ {k:"I · Connector",d:"Strength: openness and energy. Under stress: scattered, overpromises, keeps shifting goals, so the team loses focus. Pivot: the clarity check. Turn ideas into three written action items.",q:"Have I written down the three actions?"},
+ {k:"S · Stabiliser",d:"Strength: trust and belonging. Under stress: withdraws and avoids conflict, so hard problems stay hidden. Pivot: the honest truth. Address conflict directly but kindly.",q:"What am I avoiding saying?"},
+ {k:"C · Analyst",d:"Strength: fairness and quality. Under stress: hyper-critical, delays decisions, so people fear failing. Pivot: the good-enough threshold. Decide what needs 100% and what needs 80%.",q:"Does this really need to be perfect?"},
+ {k:"The Echo Effect",d:"A leader's stress echoes through the team. Own it out loud: “I'm stressed, so I'll want to rush. Help me stay grounded.”",q:"What is my mood doing to the room?"},
+ {k:"Managing up",d:"From silence to early reporting: “I hit a roadblock; here's my plan.” From absorbing stress to data-driven boundaries: “I can do X, but it delays Y. Which is the priority?”",q:"Am I a partner or a passenger?"}
+],
+cs:{name:"The 2 PM Thursday test",text:"A critical equity report for a major donor was due yesterday. Your most reliable researcher has gone silent: no email, no draft, no update. Pressure is rising. What's your gut reaction? That reaction is your under-pressure default."},
+quiz:[
+ {t:"mcq",q:"Which best describes psychological safety?",o:["A shared belief that people can speak up, admit mistakes and ask for help without fear","Everyone being nice and avoiding conflict","Having an employee wellness programme","Never facing pressure or deadlines"],a:0,w:"It's not about comfort or avoiding conflict. It's about safety to tell the truth."},
+ {t:"match",q:"Match each DISC style to its stress default.",p:[["Driver (D)","Blunt and impatient, pushes harder"],["Connector (I)","Scattered, overpromises to please"],["Stabiliser (S)","Withdraws, avoids confrontation"],["Analyst (C)","Hyper-critical, delays decisions"]],w:"Each strength has a shadow under pressure."},
+ {t:"match",q:"Match each style to its pivot.",p:[["Driver (D)","The 10-second silence"],["Connector (I)","The clarity check: three written actions"],["Stabiliser (S)","The honest truth, said kindly"],["Analyst (C)","The good-enough threshold (80% vs 100%)"]],w:"The pivot is the opposite muscle to your stress default."},
+ {t:"mcq",q:"Your supervisor adds an urgent task while you're already full. Best managing-up response?",o:["“I can do Task X, but it will delay Task Y. Which is the priority?”","Say yes and work all weekend","Say nothing and miss a deadline","Complain to peers"],a:0,w:"A data-driven boundary protects both the mission and your mind."},
+ {t:"mcq",q:"You've hit a roadblock on a deliverable. The pivot from silence is…",o:["Early reporting: “I hit a roadblock; here's my plan to fix it.”","Wait until you've fixed it","Quietly hand it to a colleague","Blame the template"],a:0,w:"Early reporting keeps problems small and trust high."},
+ {t:"mcq",q:"A leader says, “I'm stressed, so I'll want to rush. Please help me stay grounded in the process.” What are they doing?",o:["Owning their style and managing their Echo Effect","Showing weakness","Delegating the work","Venting"],a:0,w:"Naming your default out loud invites the team to help, and makes it safer for them to name theirs."}
+],
+move:{prompt:"Name your under-pressure default.",f:["My under-pressure default","My pivot","Who could help me notice"]}},
+
+{id:10,arc:2,short:"Peer Support",title:"Cohort Check-In: 20 Experiences",
+plain:"Peers can help you think, not just hand you advice. In a structured peer turn you describe a challenge and say what kind of help you want. Others ask questions first and only suggest ideas with permission. Look for bright spots: things already working, even a little.",
+hook:"Ask for the help you actually want: an ear, questions, ideas or a challenge.",
+src:"Uses the 20 Experiences card set. Cards are yours to keep for pod reflection.",
+cards:[
+ {k:"The five-minute peer turn",d:"Describe the situation and your request (2 min) → Clarifying questions (1) → Suggestions with permission (1) → Speaker reflects (1).",q:"Did I ask before advising?"},
+ {k:"Ask for the right help",d:"Listening, questions, ideas or a constructive challenge. Saying which one you want makes the help useful.",q:"What do I need today?"},
+ {k:"Bright spots",d:"Something already working, even a little, while the bigger problem continues. Ask what made it possible and where else those conditions exist.",q:"What's working, even slightly?"},
+ {k:"Your influence",d:"Separate what you can decide from what needs other people, resources or approval.",q:"Which part is mine to act on?"},
+ {k:"Ground rules",d:"Keep stories with their owner. Passing is welcome. Advice needs permission.",q:"Is this my story to share?"}
+],
+cs:{name:"How the session ran",text:"Fellows browsed 20 leadership-experience cards, picked one that matched a current challenge, wrote a short request for support, then took equal five-minute turns in groups of four."},
+quiz:[
+ {t:"order",q:"Put the five-minute peer turn in order.",i:["Describe the situation and request (2 min)","Clarifying questions (1 min)","Suggestions, with permission (1 min)","Speaker reflects (1 min)"],w:"Understand before you suggest, and let the speaker have the last word."},
+ {t:"mcq",q:"What's a bright spot?",o:["Something already working, even a little, while the wider problem continues","A success story from another country","The best idea in the cohort","A fully solved problem"],a:0,w:"Bright spots show you conditions you can copy or adapt."},
+ {t:"mcq",q:"A peer is mid-story and you have a great fix. What do you do?",o:["Ask clarifying questions, then offer it if they say they want ideas","Jump in with it straight away","Tell them afterwards what they did wrong","Never share it"],a:0,w:"Advice needs permission. Questions first."},
+ {t:"mcq",q:"Which is NOT one of the support types you can request?",o:["Someone to take the task off your hands","Listening","Questions","Ideas or a constructive challenge"],a:0,w:"Peers help you think; the action stays yours."},
+ {t:"mcq",q:"Why separate “What can I decide?” from “What needs others or approval?”",o:["So your next step is something you can actually do","So you know whom to blame","Because approvals are always slow","It's a GHC rule"],a:0,w:"A next step inside your influence is one you'll actually take."}
+],
+move:{prompt:"Bring a challenge to your pod.",f:["The challenge on my mind","A bright spot I can build on","My small next action"]}},
+
+{id:11,arc:2,short:"Up, Down & Across",title:"Managing Up, Down & Across",
+plain:"Your work depends on three kinds of relationship. Up: agree priorities and risks with your supervisor. Down: agree outcomes, capacity and support with the people you manage. Across: negotiate shared work with peers you don't control. Clear roles and regular check-ins prevent most confusion.",
+hook:"Up: what matters most? Down: what does done look like? Across: what do you need from me, and by when?",
+src:"Tools from The Management Center: MOCHA, check-in agenda, One-Minute email test, “Your boss is human too”.",
+cards:[
+ {k:"Managing up",d:"Clarify priorities, decisions and risks with your supervisor. Name trade-offs instead of silently absorbing them.",q:"Which takes priority, and what can move?"},
+ {k:"Managing down",d:"Agree outcomes, capacity and support with people you manage. Define what “complete” looks like.",q:"Where do you need support?"},
+ {k:"Managing across",d:"Negotiate shared work with colleagues you don't supervise. Agree dependencies and who follows up.",q:"What do you need from us, and by when?"},
+ {k:"Workstyles conversation",d:"How do we each prefer updates, disagreement, urgent requests and escalation?",q:"Have we talked about how we work?"},
+ {k:"Regular check-in",d:"Progress, priorities, obstacles, decisions needed, support, actions. Agree frequency and channel.",q:"Is my check-in covering all six?"},
+ {k:"MOCHA",d:"Manager (assigns and supports), Owner (one person driving it to done), Consulted (gives input), Helper (does part of the work), Approver (signs off).",q:"Is there exactly one Owner?"},
+ {k:"The One-Minute email",d:"Could they reply between meetings? Ask yes/no or A/B/C, make a recommendation, put the ask at the top, suggest a default.",q:"Can this be answered in a minute?"},
+ {k:"Your boss is human too",d:"What pressures is your supervisor under? How do they play out? How should you adjust your approach?",q:"What would make their yes easy?"}
+],
+cs:{name:"Amina's commitments (Uganda)",text:"Amina manages a programme team. Her supervisor wants an extra report by Thursday. Her direct report Tendai is preparing verified figures for an outreach review. Her peer Nandi books transport for that review but is waiting on dates. Amina can't promise extra funding, add unpaid hours or direct Nandi's team."},
+quiz:[
+ {t:"match",q:"Match each of Amina's openings to its direction.",p:[["“We can finish the verified figures or the extra analysis by Thursday. Which takes priority?”","Up: supervisor"],["“Let's agree which output matters first, what complete looks like and where you need support.”","Down: Tendai"],["“What do you need from us to confirm transport, and by when? Who follows up if dates change?”","Across: Nandi"]],w:"Up clarifies priorities, down agrees outcomes and support, across negotiates dependencies."},
+ {t:"match",q:"Match the MOCHA roles.",p:[["Manager","Assigns the work and supports the owner"],["Owner","Drives the work to done overall"],["Consulted","Gives input before decisions"],["Helper","Does part of the work"],["Approver","Signs off on the final result"]],w:"MOCHA makes it clear who coordinates, delivers, contributes and approves."},
+ {t:"mcq",q:"Amina's supervisor wants an extra report by Thursday, but her team is at capacity. Best move?",o:["Name the trade-off and ask which takes priority","Promise both and hope it works out","Ask Tendai to work late unpaid","Ignore the request"],a:0,w:"Managing up means surfacing trade-offs so the person with authority can decide."},
+ {t:"mcq",q:"Which email opener passes the One-Minute Test?",o:["“Three options below. I propose #2 and will go ahead Thursday unless you say otherwise.”","“Thoughts on the attached?”","“Can we find time to discuss this sometime?”","A long background paragraph with the question at the end"],a:0,w:"Recommendation, ask at the top, and a default plan. They can reply in seconds."},
+ {t:"mcq",q:"Why is managing across often the hardest?",o:["You must negotiate with people you don't supervise","Peers are less skilled","There are no deadlines","Supervisors interfere"],a:0,w:"Without authority, agreements rest on shared interest and clear follow-up."}
+],
+move:{prompt:"Design one better check-in.",f:["One relationship (up, down or across)","A check-in or workstyles question I'll try","When"]}},
+
+{id:12,arc:3,short:"Self, Us & Now",title:"Leadership Storytelling: Story of Us & Now",
+plain:"Public narrative links three stories. Story of Self: why I care. Story of Us: what connects me with you. Story of Now: why we must act now, and the specific step I'm asking you to take. A good narrative moves the heart (why it matters) and the head (why the action can work).",
+hook:"Self earns their trust. Us gives them a reason to join. Now gives them something to do.",
+src:"Public narrative: Marshall Ganz. Example: Christian Benimana, TEDGlobal 2017.",
+cards:[
+ {k:"Story of Self",d:"A personal value shown through experience.",q:"Why do I care?"},
+ {k:"Story of Us",d:"Shared values and experiences, with room for difference.",q:"What connects us?"},
+ {k:"Story of Now",d:"A challenge or opportunity that calls for a specific choice.",q:"Why act now?"},
+ {k:"Heart",d:"Why does this matter? What do we care about and value?",q:"Will they feel it?"},
+ {k:"Head",d:"How could the action lead to the change we want? What makes it credible and feasible?",q:"Will they believe it can work?"},
+ {k:"A good ask",d:"Specific, feasible and within the audience's influence.",q:"Could this audience actually do it this week?"},
+ {k:"Why I Lead",d:"A spoken reflection of no more than 3 minutes at the Culmination Conference: who you are, what shaped you, why you care, and the leader you're becoming.",q:"Is it truthful and in my own voice?"}
+],
+cs:{name:"Christian Benimana's TED talk",text:"Fellows watched a public narrative about the next generation of African architects, listening for his personal story (Self), the people he connects to (Us), and the future he invites (Now), then drafted their own three-minute narrative using the six storytelling steps."},
+quiz:[
+ {t:"match",q:"Match each story to its question.",p:[["Story of Self","Why do I care?"],["Story of Us","What connects us?"],["Story of Now","Why act now?"]],w:"Self → Us → Now: from your values to shared values to shared action."},
+ {t:"mcq",q:"Which is the strongest ask?",o:["“Join our 30-minute call on Thursday to review the outreach data with us.”","“Let's end health inequity.”","“Someone should do something.”","“Please care more.”"],a:0,w:"Specific, feasible and within the audience's influence."},
+ {t:"mcq",q:"“Data shows the pilot cut missed visits by a third.” This line mainly speaks to the…",o:["Head","Heart"],a:0,w:"Evidence makes the action credible. That's the head."},
+ {t:"mcq",q:"How long is your Why I Lead reflection at the Culmination Conference?",o:["No more than 3 minutes","10 minutes","A written essay","One minute"],a:0,w:"Three minutes, spoken, in your own voice."},
+ {t:"mcq",q:"Your Story of Us claims “everyone in this room grew up without clinic access.” What's the issue?",o:["It claims more than you can know. Leave room for difference.","It's too short","It's not emotional enough","Nothing"],a:0,w:"Listeners should check: where does the story claim more than the speaker can know?"}
+],
+move:{prompt:"Sketch the invitation in your narrative.",f:["My audience","The shared value we hold","The specific ask"]}},
+
+{id:13,arc:3,short:"Goal Setting",title:"The Science of Goal Setting",
+plain:"Clear, challenging goals help you grow, but only with the right skills, support and feedback. For something new or complex, set a learning goal (what you'll practise) instead of only a result. Use SMART-ER to shape it, an if–then plan for obstacles, and a review point to adjust.",
+hook:"A goal without a review point is a wish. Plan for the obstacle before it shows up.",
+src:"Goal setting: Locke & Latham (2002). If–then planning: Gollwitzer & Sheeran.",
+cards:[
+ {k:"SMART-ER",d:"Specific, Measurable, Achievable, Relevant, Time-bound, plus Evaluate (when and how you'll review) and Readjust (what you'll change after learning).",q:"Which letter is weakest in my goal?"},
+ {k:"Learning goal",d:"For new or complex tasks, aim at building the capability first. “I'll practise X and record Y” rather than “I'll hit target Z.”",q:"What do I need to learn to get there?"},
+ {k:"If–then plan",d:"“If [obstacle] happens, then I will [response].” Deciding in advance makes follow-through more likely.",q:"What's my most likely obstacle?"},
+ {k:"Control vs depends",d:"Underline what you control. Circle what depends on someone else, approval or resources. Reshape promises that exceed your authority.",q:"Is my goal within my influence?"},
+ {k:"Support by agreement",d:"Pick a peer, pod member or supervisor, agree what support helps and how you'll check in.",q:"Who will I ask?"}
+],
+cs:{name:"Example learning goal",text:"“For the next six weeks, I will ask at least one open-ended question in team discussions and ask a colleague for feedback on how well I am creating space for different perspectives.” Your Stretch Project can be the setting for this kind of goal."},
+quiz:[
+ {t:"order",q:"Put SMART-ER in order.",i:["Specific","Measurable","Achievable","Relevant","Time-bound","Evaluate","Readjust"],w:"The ER makes a goal a learning plan: review it, then adapt."},
+ {t:"match",q:"Match each letter to its question.",p:[["Measurable","What evidence will show progress?"],["Achievable","What's feasible with my support and capacity?"],["Evaluate","When and how will I review progress?"],["Readjust","What will I change based on what I learn?"]],w:"These four are where most goals are weakest."},
+ {t:"mcq",q:"You're facilitating data reviews for the first time. Which goal fits best?",o:["Over six weeks, facilitate three 20-minute reviews and record one decision or open question after each","Increase indicator performance by 40% in six weeks","Be a better facilitator","Fix the data system"],a:0,w:"For a new skill, a learning goal with clear evidence beats a big outcome target."},
+ {t:"mcq",q:"Which is an if–then plan?",o:["If the review meeting is moved, I'll agree another time with the team that same week","I will try hard","Then I'll see what happens","If I have time"],a:0,w:"A specific obstacle linked to a specific response."},
+ {t:"mcq",q:"“I will get my director to approve a new budget.” What's the issue?",o:["The outcome depends on someone else's decision. Reframe to what you control, like preparing and presenting the case.","It's too short","It isn't ambitious enough","There's no issue"],a:0,w:"Underline what you control, circle what depends on others."}
+],
+move:{prompt:"Draft your fellowship leadership goal.",f:["The behaviour or capability I'll develop","My if–then plan","My first small step and review date"]}}
+];
+
+const RANKS=[[0,"Newcomer"],[80,"Listener"],[200,"Experimenter"],[360,"Builder"],[540,"Weaver"],[740,"Guide"],[960,"Visionary"]];
+const BADGES=[
+ {id:"first",g:"1",n:"First Steps",d:"Clear your first station"},
+ {id:"mind",g:"?",n:"Trap Spotter",d:"3 stars on Mindtraps"},
+ {id:"camp0",g:"I",n:"Know Yourself",d:"Clear camp 1"},
+ {id:"camp1",g:"II",n:"Lead With Others",d:"Clear camp 2"},
+ {id:"camp2",g:"III",n:"Work Well Together",d:"Clear camp 3"},
+ {id:"camp3",g:"IV",n:"Story to Action",d:"Clear camp 4"},
+ {id:"story",g:"S",n:"Storyteller",d:"Clear both storytelling stations"},
+ {id:"perfect",g:"★",n:"Flawless",d:"Every answer right first time on a station"},
+ {id:"flip",g:"◐",n:"Card Turner",d:"Turn every card in 5 stations"},
+ {id:"commit",g:"✓",n:"Committed",d:"Write 5 Your Move commitments"},
+ {id:"rapid",g:"10",n:"Quick Thinker",d:"Score 10+ in Rapid Fire"},
+ {id:"streak",g:"3",n:"On a Roll",d:"Play 3 days in a row"},
+ {id:"trail",g:"13",n:"Full Trail",d:"Clear all 13 stations"}
+];
+
+/* ---------------- STATE ---------------- */
+const KEY="alaQuest.v1";
+let st=load();
+function blank(){return{xp:0,ss:{},badges:[],rapidBest:0,streak:0,lastDay:null}}
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&typeof v==="object")return Object.assign(blank(),v)}catch(e){}return blank()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function ss(id){return st.ss[id]||(st.ss[id]={stars:0,done:false,flipped:[],move:null,perfect:false})}
+function today(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function touchStreak(){const t=today();if(st.lastDay===t)return;const y=new Date();y.setDate(y.getDate()-1);const ys=y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate();st.streak=st.lastDay===ys?st.streak+1:1;st.lastDay=t}
+function addXP(n,msg){if(n<=0)return;const before=rankOf(st.xp);st.xp+=n;touchStreak();save();toast(`+${n} XP${msg?" · "+msg:""}`);const after=rankOf(st.xp);if(after[1]!==before[1])setTimeout(()=>modal("↑",`You're now a ${after[1]}`,"New rank unlocked. Keep walking the trail."),500);renderBar();checkBadges()}
+function rankOf(xp){let r=RANKS[0],nx=null;for(let i=0;i<RANKS.length;i++){if(xp>=RANKS[i][0]){r=RANKS[i];nx=RANKS[i+1]||null}}return[r[0],r[1],nx]}
+
+function checkBadges(){
+ const has=id=>st.badges.includes(id);
+ const done=id=>st.ss[id]&&st.ss[id].done;
+ const conds={
+  first:()=>S.some(s=>done(s.id)),
+  mind:()=>st.ss[1]&&st.ss[1].stars>=3,
+  camp0:()=>S.filter(s=>s.arc===0).every(s=>done(s.id)),
+  camp1:()=>S.filter(s=>s.arc===1).every(s=>done(s.id)),
+  camp2:()=>S.filter(s=>s.arc===2).every(s=>done(s.id)),
+  camp3:()=>S.filter(s=>s.arc===3).every(s=>done(s.id)),
+  story:()=>done(4)&&done(12),
+  perfect:()=>Object.values(st.ss).some(x=>x.perfect),
+  flip:()=>S.filter(s=>st.ss[s.id]&&st.ss[s.id].flipped.length>=s.cards.length).length>=5,
+  commit:()=>Object.values(st.ss).filter(x=>x.move).length>=5,
+  rapid:()=>st.rapidBest>=10,
+  streak:()=>st.streak>=3,
+  trail:()=>S.every(s=>done(s.id))
+ };
+ const fresh=[];
+ BADGES.forEach(b=>{if(!has(b.id)&&conds[b.id]()){st.badges.push(b.id);fresh.push(b)}});
+ if(fresh.length){save();fresh.forEach((b,i)=>setTimeout(()=>modal(b.g,"Badge: "+b.n,b.d),900+i*200))}
+}
+
+/* ---------------- UI HELPERS ---------------- */
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const STAR='<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/>';
+const starRow=(n,cls="stars")=>`<span class="${cls}">${[0,1,2].map(i=>`<svg viewBox="0 0 24 24" aria-hidden="true" class="${i<n?"on":"off"}">${STAR}</svg>`).join("")}</span>`;
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;$("#toasts").appendChild(t);setTimeout(()=>t.remove(),2200)}
+let modalQ=[],modalOpen=false;
+function modal(g,h,p){modalQ.push([g,h,p]);if(!modalOpen)nextModal()}
+function nextModal(){const m=modalQ.shift();if(!m){modalOpen=false;$("#modalRoot").innerHTML="";return}modalOpen=true;
+ $("#modalRoot").innerHTML=`<div class="modal" role="dialog" aria-modal="true"><div><div class="hex">${esc(m[0])}</div><h3>${esc(m[1])}</h3><p>${esc(m[2])}</p><button class="btn copper" id="mOk">Nice</button></div></div>`;
+ $("#mOk").focus();$("#mOk").onclick=nextModal}
+
+function renderBar(){
+ const [base,name,nx]=rankOf(st.xp);
+ $("#xpNum").textContent=`${st.xp} XP · ${name}`;
+ $("#xpMeter").style.width=nx?Math.min(100,(st.xp-base)/(nx[0]-base)*100)+"%":"100%";
+ $("#streakChip").textContent=`${st.streak||0} day streak`;
+}
+function setNav(v){document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-current",b.dataset.go===v?"page":"false"))}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g){go(g.dataset.go)}});
+function go(v){if(location.hash==="#"+v)route();else location.hash=v;window.scrollTo(0,0)}
+
+/* ---------------- ROUTER ---------------- */
+let rfTimer=null;
+function route(){
+ clearInterval(rfTimer);
+ const h=(location.hash||"#trail").slice(1);
+ const m=h.match(/^s(\d+)$/);
+ if(m&&S.find(s=>s.id==+m[1])){setNav("trail");renderStation(+m[1])}
+ else if(h==="rapid"){setNav("rapid");renderRapid()}
+ else if(h==="sheet"){setNav("sheet");renderSheet()}
+ else if(h==="progress"){setNav("progress");renderProgress()}
+ else{setNav("trail");renderTrail()}
+}
+window.addEventListener("hashchange",route);
+
+/* ---------------- TRAIL ---------------- */
+function renderTrail(){
+ const done=S.filter(s=>ss(s.id).done).length, stars=S.reduce((a,s)=>a+(st.ss[s.id]?st.ss[s.id].stars:0),0);
+ const next=S.find(s=>!(st.ss[s.id]&&st.ss[s.id].done));
+ const [,rank]=rankOf(st.xp);
+ let html=`<section class="hero">
+  <div class="strip">ALA 2026–27 · First convening · Zambia</div>
+  <h1><span>Leadership</span>Quest</h1>
+  <p><b>Thirteen sessions, one road.</b> Each stop turns a session into plain language, flip cards and a scenario challenge drawn from the conference cases. Earn stars, XP and badges, and leave each one with a commitment you can bring to your pod.</p>
+  <div class="row">
+   <div class="stat"><b>${done}/13</b><span>stations cleared</span></div>
+   <div class="stat"><b>${stars}/39</b><span>stars earned</span></div>
+   <div class="stat"><b>${esc(rank)}</b><span>current rank</span></div>
+  </div>
+  <div class="row">${next?`<button class="btn light" data-go="s${next.id}">${done?"Continue":"Start"}: ${esc(next.short)} →</button>`:`<button class="btn light" data-go="rapid">All clear. Try Rapid Fire →</button>`}</div>
+ </section><div class="trail" id="trailMap"></div>`;
+ $("#app").innerHTML=html;
+ // layout
+ const NODE=150,CAMP=110,xs=[50,24,50,76];
+ let y=20,items=[],pts=[],k=0,lastArc=-1;
+ S.forEach(s=>{
+  if(s.arc!==lastArc){items.push({camp:s.arc,y});y+=CAMP;lastArc=s.arc}
+  const x=xs[k%4];k++;items.push({s,x,y:y+32});pts.push({x,y:y+32,id:s.id});y+=NODE;
+ });
+ const H=y;const tr=$("#trailMap");tr.style.height=H+"px";
+ let svg=`<svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" height="${H}" aria-hidden="true">`,edges="",roads="";
+ for(let i=0;i<pts.length-1;i++){const a=pts[i],b=pts[i+1],dy=(b.y-a.y)/2;const dn=st.ss[a.id]&&st.ss[a.id].done;
+  const d=`M${a.x} ${a.y} C${a.x} ${a.y+dy} ${b.x} ${b.y-dy} ${b.x} ${b.y}`;edges+=`<path class="road edge" d="${d}"/>`;roads+=`<path class="road ${dn?"done":"todo"}" d="${d}"/><path class="lane ${dn?"done":"todo"}" d="${d}"/>`}
+ svg+=edges+roads;
+ svg+="</svg>";
+ let out=svg;
+ items.forEach(it=>{
+  if(it.camp!==undefined){const A=ARCS[it.camp];out+=`<div class="camp" style="top:${it.y}px"><div class="a${it.camp}"><div class="eyebrow">Camp ${it.camp+1}</div><h3>${esc(A.name)}</h3><small>${esc(A.sub)}</small></div></div>`}
+  else{const s=it.s,x=st.ss[s.id]||{};const cls=x.done?"done":(x.flipped&&x.flipped.length)?"started":"";
+   out+=`<button class="node c${s.arc} ${cls} ${next&&next.id===s.id?"next":""}" style="left:${it.x}%;top:${it.y}px" data-go="s${s.id}" aria-label="Station ${s.id}: ${esc(s.title)}"><span class="disc">${s.id}</span><span class="post"></span><span class="lbl">${esc(s.short)}</span>${starRow(x.stars||0)}</button>`}
+ });
+ tr.innerHTML=out;
+}
+
+/* ---------------- STATION ---------------- */
+let Q=null; // quiz runtime
+function renderStation(id){
+ const s=S.find(x=>x.id===id), me=ss(id);
+ const prev=S.find(x=>x.id===id-1), next=S.find(x=>x.id===id+1);
+ $("#app").innerHTML=`
+ <button class="back" data-go="trail">← Back to trail</button>
+ <div class="st-head"><div class="st-num a${s.arc}">${s.id}</div><div><div class="eyebrow">Camp ${s.arc+1} · ${esc(ARCS[s.arc].name)}</div><h1>${esc(s.title)}</h1>${starRow(me.stars)}</div></div>
+
+ <section class="block"><h2><span class="tag">STEP 1</span>In plain words</h2>
+  <p class="plain">${esc(s.plain)}</p>
+  <div class="hook"><b>REMEMBER</b><span>${esc(s.hook)}</span></div>
+  <div class="src">${esc(s.src)}</div>
+ </section>
+
+ <section class="block"><h2><span class="tag">STEP 2</span>Flip the cards <span class="eyebrow" id="flipCount"></span></h2>
+  <div class="cards" id="cards">${s.cards.map((c,i)=>`<button class="card c${i%4} ${me.flipped.includes(i)?"seen":""}" data-i="${i}" aria-label="Flip card: ${esc(c.k)}"><span class="in"><span class="f"><small>CARD ${i+1}/${s.cards.length}</small><h3>${esc(c.k)}</h3><small>Tap to flip</small></span><span class="b"><span>${esc(c.d)}</span>${c.q?`<em>Ask: ${esc(c.q)}</em>`:""}</span></span></button>`).join("")}</div>
+ </section>
+
+ <section class="block"><h2><span class="tag">STEP 3</span>The case from the session</h2>
+  <details class="case"><summary>${esc(s.cs.name)}</summary><p>${esc(s.cs.text)}</p></details>
+ </section>
+
+ <section class="block"><h2><span class="tag">STEP 4</span>Challenge</h2><div class="quiz" id="quiz"></div></section>
+
+ <section class="block"><h2><span class="tag">STEP 5</span>Your move</h2>
+  <form class="move" id="move"><p style="margin:0;color:var(--muted)">${esc(s.move.prompt)} Saved privately in this browser.</p>
+  ${s.move.f.map((f,i)=>`<label for="mv${s.id}_${i}">${esc(f)}<textarea id="mv${s.id}_${i}" rows="2">${me.move?esc(me.move[i]||""):""}</textarea></label>`).join("")}
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn" type="submit">${me.move?"Update":"Save"} my move${me.move?"":" · +15 XP"}</button><span class="saved" id="mvSaved">${me.move?"Saved":""}</span></div></form>
+ </section>
+
+ <div class="next-row">${prev?`<button class="btn ghost" data-go="s${prev.id}">← ${esc(prev.short)}</button>`:"<span></span>"}${next?`<button class="btn" data-go="s${next.id}">${esc(next.short)} →</button>`:`<button class="btn copper" data-go="rapid">Rapid Fire →</button>`}</div>`;
+ // cards
+ const upd=()=>{$("#flipCount").textContent=`${me.flipped.length}/${s.cards.length} seen`};upd();
+ document.querySelectorAll("#cards .card").forEach(c=>c.onclick=()=>{c.classList.toggle("flip");const i=+c.dataset.i;
+  if(!me.flipped.includes(i)){me.flipped.push(i);c.classList.add("seen");save();upd();
+   if(me.flipped.length===s.cards.length){addXP(5,"all cards seen")}else{save();renderBar()}}});
+ // move
+ $("#move").onsubmit=e=>{e.preventDefault();const vals=s.move.f.map((_,i)=>$(`#mv${s.id}_${i}`).value.trim());
+  if(!vals.some(Boolean)){$("#mvSaved").textContent="Write at least one line first.";return}
+  const first=!me.move;me.move=vals;save();$("#mvSaved").textContent="Saved";
+  e.target.querySelector("button").textContent="Update my move";
+  if(first)addXP(15,"commitment saved");else{toast("Move updated");checkBadges()}};
+ startQuiz(s);
+}
+
+function startQuiz(s){
+ Q={s,i:0,res:s.quiz.map(()=>null),first:true,state:{}};
+ renderQ();
+}
+function pips(){return `<div class="pips">${Q.s.quiz.map((_,i)=>`<i class="${Q.res[i]===true?"ok":Q.res[i]===false?"meh":i===Q.i?"cur":""}"></i>`).join("")}</div>`}
+function renderQ(){
+ const box=$("#quiz"), q=Q.s.quiz[Q.i];
+ if(!q)return finishQuiz();
+ Q.first=true;Q.solved=false;
+ const label={mcq:"Choose one",match:"Match the pairs",order:"Put in order"}[q.t];
+ box.innerHTML=`${pips()}<div class="qtype">Question ${Q.i+1} of ${Q.s.quiz.length} · ${label}</div><p class="q">${esc(q.q)}</p><div id="qbody"></div><div id="fb"></div><div class="qnav"><span class="eyebrow" id="qhint"></span><span id="qact"></span></div>`;
+ ({mcq:mcqUI,match:matchUI,order:orderUI})[q.t](q);
+}
+function solved(q){
+ Q.solved=true;Q.res[Q.i]=Q.first;
+ $("#fb").innerHTML=`<div class="feedback good"><b>${Q.first?"Right first time.":"Got it."}</b>${esc(q.w)}</div>`;
+ $("#qact").innerHTML=`<button class="btn" id="qNext">${Q.i===Q.s.quiz.length-1?"See results":"Next"} →</button>`;
+ $("#qNext").onclick=()=>{Q.i++;renderQ();$("#quiz").scrollIntoView({block:"nearest",behavior:"smooth"})};
+ $("#qNext").focus({preventScroll:true});
+}
+function missed(msg){Q.first=false;$("#fb").innerHTML=`<div class="feedback bad"><b>Not quite.</b>${esc(msg||"Have another go.")}</div>`}
+
+function mcqUI(q){
+ const order=shuffle(q.o.map((_,i)=>i));
+ $("#qbody").innerHTML=`<div class="opts">${order.map(i=>`<button class="opt" data-i="${i}">${esc(q.o[i])}</button>`).join("")}</div>`;
+ document.querySelectorAll("#qbody .opt").forEach(b=>b.onclick=()=>{if(Q.solved)return;const i=+b.dataset.i;
+  if(i===q.a){b.classList.add("right");document.querySelectorAll("#qbody .opt").forEach(x=>x.disabled=true);solved(q)}
+  else{b.classList.add("wrong");b.disabled=true;missed("That one's out. Try another option.")}});
+}
+function matchUI(q){
+ const R=shuffle(q.p.map((_,i)=>i));const pair={};const locked=new Set();let flash={};let sel=0;
+ const L="ABCDEF";
+ const tag=i=>`<span class="pt p${i}">${L[i]}</span>`;
+ const mark=i=>flash[i]==="bad"?'<span class="res bad" aria-label="wrong">✗</span>':locked.has(i)?'<span class="res ok" aria-label="correct">✓</span>':"";
+ const draw=()=>{
+  if(Q.solved){
+   $("#qbody").innerHTML=`<div class="pairs-done">${q.p.map((p,i)=>`<div class="pr">${tag(i)}<b>${esc(p[0])}</b><span class="arr">→</span><span>${esc(p[1])}</span></div>`).join("")}</div>`;return}
+  const owner={};Object.entries(pair).forEach(([l,r])=>owner[r]=+l);
+  $("#qbody").innerHTML=`<p class="mhelp">Tap a left item, then the answer that matches it. Matched pairs share a colour and a letter.</p><div class="match"><div class="col">${q.p.map((p,i)=>{const on=pair[i]!==undefined;
+    return `<button class="opt mt ${on?"paired p"+i:""} ${sel===i&&!on?"picking":""} ${locked.has(i)?"lock":""} ${flash[i]==="bad"?"shake":""}" data-l="${i}" ${locked.has(i)?"disabled":""}>${tag(i)}<span class="tx">${esc(p[0])}</span>${mark(i)}</button>`}).join("")}</div>
+   <div class="col r">${R.map(j=>{const o=owner[j];const on=o!==undefined;
+    return `<button class="opt mt ${on?"paired p"+o:""} ${on&&locked.has(o)?"lock":""} ${on&&flash[o]==="bad"?"shake":""}" data-r="${j}" ${on&&locked.has(o)?"disabled":""}>${on?tag(o):'<span class="pt empty">?</span>'}<span class="tx">${esc(q.p[j][1])}</span>${on?mark(o):""}</button>`}).join("")}</div></div>`;
+  document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{if(Q.solved)return;const i=+b.dataset.l;if(locked.has(i))return;
+   if(pair[i]!==undefined){delete pair[i]}sel=i;flash={};draw()});
+  document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{if(Q.solved)return;const j=+b.dataset.r;flash={};
+   const o=Object.keys(pair).map(Number).find(l=>pair[l]===j);
+   if(o!==undefined){if(locked.has(o))return;delete pair[o];sel=o;draw();return}
+   if(sel===null||sel===undefined){$("#qhint").textContent="Pick an item on the left first";return}
+   pair[sel]=j;sel=q.p.findIndex((_,i)=>pair[i]===undefined);if(sel<0)sel=null;draw()});
+  const full=Object.keys(pair).length===q.p.length;
+  $("#qhint").textContent=full?"All matched. Press Check.":`${Object.keys(pair).length} of ${q.p.length} matched`;
+  $("#qact").innerHTML=`<button class="btn" id="chk" ${full?"":"disabled"}>Check</button>`;
+  $("#chk").onclick=()=>{
+   const wrong=[];q.p.forEach((_,i)=>{if(pair[i]===i)locked.add(i);else wrong.push(i)});
+   if(!wrong.length){Q.solved=true;draw();$("#qhint").textContent="";solved(q);return}
+   wrong.forEach(i=>flash[i]="bad");
+   missed(`${q.p.length-wrong.length} of ${q.p.length} correct. Correct pairs are locked with ✓. The ✗ pairs will clear so you can try them again.`);
+   draw();$("#chk").disabled=true;$("#qhint").textContent="Clearing the ✗ pairs…";
+   setTimeout(()=>{wrong.forEach(i=>delete pair[i]);flash={};sel=wrong[0];if(!Q.solved)draw()},1400);
+  };
+ };
+ draw();
+}
+function orderUI(q){
+ const pool=shuffle(q.i.map((_,i)=>i));const pick=[];let bad=new Set();
+ const draw=()=>{
+  $("#qbody").innerHTML=`<div class="order-ans" id="ans">${pick.map((i,ix)=>`<button class="opt ${bad.has(ix)?"wrong":""} ${Q.solved?"right":""}" data-p="${ix}" style="text-decoration:none"><span class="n">${ix+1}</span>${esc(q.i[i])}</button>`).join("")}</div><div class="opts">${pool.filter(i=>!pick.includes(i)).map(i=>`<button class="opt" data-o="${i}">${esc(q.i[i])}</button>`).join("")}</div>`;
+  document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(Q.solved)return;pick.push(+b.dataset.o);bad=new Set();draw()});
+  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{if(Q.solved)return;pick.splice(+b.dataset.p,1);bad=new Set();draw()});
+  if(Q.solved)return;
+  $("#qhint").textContent=pick.length?"Tap a placed step to remove it":"";
+  $("#qact").innerHTML=`<button class="btn" id="chk" ${pick.length===q.i.length?"":"disabled"}>Check</button>`;
+  const c=$("#chk");if(c)c.onclick=()=>{
+   const w=pick.map((v,ix)=>v!==ix?ix:-1).filter(x=>x>=0);
+   if(!w.length){draw2()}else{bad=new Set(w);missed(`${q.i.length-w.length} of ${q.i.length} in the right spot. Remove the red ones and try again.`);draw()}
+  };
+ };
+ const draw2=()=>{Q.solved=true;draw();$("#qhint").textContent="";solved(q)};
+ draw();
+}
+function finishQuiz(){
+ const s=Q.s,me=ss(s.id),n=s.quiz.length,firsts=Q.res.filter(r=>r===true).length,pct=firsts/n;
+ const stars=pct>=.9?3:pct>=.6?2:1;
+ const wasDone=me.done,oldStars=me.stars;
+ let xp=0;
+ if(!wasDone){xp=firsts*10+(n-firsts)*4}else if(stars>oldStars){xp=(stars-oldStars)*10}
+ me.done=true;me.stars=Math.max(oldStars,stars);if(firsts===n)me.perfect=true;save();
+ $("#quiz").innerHTML=`${pips()}<div class="done-card"><div class="eyebrow">Station ${s.id} cleared</div>${starRow(stars,"big-stars")}<h3>${firsts}/${n} right first time</h3><p style="color:var(--muted);max-width:44ch;margin:8px auto 16px">${stars===3?"Excellent. You've got this one.":stars===2?"Solid. Replay later to lock in the last star.":"A start. Re-read the cards, then replay."}${wasDone&&stars<=oldStars?" (Best so far: "+oldStars+" stars.)":""}</p><button class="btn ghost" id="replay">Replay challenge</button></div>`;
+ $("#replay").onclick=()=>startQuiz(s);
+ // refresh header stars
+ const hs=document.querySelector(".st-head .stars");if(hs)hs.outerHTML=starRow(me.stars);
+ if(xp)addXP(xp,`station ${s.id}`);else{renderBar();checkBadges()}
+}
+
+/* ---------------- RAPID FIRE ---------------- */
+function rfPool(){const out=[];S.forEach(s=>s.quiz.forEach(q=>{if(q.t==="mcq"&&q.o.length>2)out.push({...q,from:s.short})}));return shuffle(out)}
+function renderRapid(){
+ $("#app").innerHTML=`<div class="rf" id="rf"><div class="eyebrow">Arcade</div><h1 style="font-size:32px;margin:6px 0 10px">Rapid Fire</h1>
+ <p style="color:var(--muted);margin:0 0 16px">60 seconds. Questions from all 13 sessions. Each right answer scores a point; each wrong answer costs 3 seconds.</p>
+ <p style="margin:0 0 18px">Personal best: <b style="font-family:var(--f-display);font-weight:400">${st.rapidBest}</b></p>
+ <button class="btn copper" id="rfGo">Start the clock</button></div>`;
+ $("#rfGo").onclick=playRapid;
+}
+function playRapid(){
+ let pool=rfPool(),idx=0,score=0,left=60,lock=false;
+ const box=$("#rf");
+ const end=()=>{clearInterval(rfTimer);const best=score>st.rapidBest;if(best)st.rapidBest=score;save();
+  box.innerHTML=`<div class="done-card"><div class="eyebrow">Time</div><h3 style="font-size:40px;margin:10px 0">${score}</h3><p style="color:var(--muted)">${best?"New personal best!":"Personal best: "+st.rapidBest}</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn copper" id="again">Play again</button><button class="btn ghost" data-go="trail">Back to trail</button></div></div>`;
+  $("#again").onclick=playRapid;addXP(score*2,"Rapid Fire");if(!score){renderBar();checkBadges()}};
+ const draw=()=>{
+  if(idx>=pool.length){pool=pool.concat(rfPool());}
+  const q=pool[idx],ord=shuffle(q.o.map((_,i)=>i));lock=false;
+  box.innerHTML=`<div class="rf-top"><span>Score ${score}</span><span id="rfT">${left}s</span></div><div class="timer"><b id="rfBar" style="width:${left/60*100}%"></b></div><div class="from">${esc(q.from)}</div><p class="q">${esc(q.q)}</p><div class="opts">${ord.map(i=>`<button class="opt" data-i="${i}">${esc(q.o[i])}</button>`).join("")}</div>`;
+  box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(lock)return;lock=true;const i=+b.dataset.i;
+   if(i===q.a){score++;b.classList.add("right");box.classList.remove("flash-ok");void box.offsetWidth;box.classList.add("flash-ok");setTimeout(()=>{idx++;draw()},280)}
+   else{left=Math.max(0,left-3);b.classList.add("wrong");box.querySelector(`.opt[data-i="${q.a}"]`).classList.add("right");box.classList.remove("flash-bad");void box.offsetWidth;box.classList.add("flash-bad");setTimeout(()=>{if(left<=0)return end();idx++;draw()},900)}});
+ };
+ clearInterval(rfTimer);
+ rfTimer=setInterval(()=>{left--;const t=$("#rfT"),b=$("#rfBar");if(t)t.textContent=left+"s";if(b)b.style.width=Math.max(0,left/60*100)+"%";if(left<=0)end()},1000);
+ draw();
+}
+
+/* ---------------- CHEAT SHEET ---------------- */
+function renderSheet(){
+ $("#app").innerHTML=`<div class="eyebrow">Reference</div><h1 class="page-h">Cheat Sheet</h1>
+ <p style="color:var(--muted);margin:0;max-width:60ch">Every framework from the convening on one page. Handy before a pod call, a hard conversation, or drafting Why I Lead.</p>
+ <label for="q" class="eyebrow" style="display:block;margin-top:16px">Search</label>
+ <input id="q" class="search" style="margin-top:6px" placeholder="Try “SBIN”, “autonomy” or “Weavers”" autocomplete="off">
+ <div class="sheet" id="sheet"></div>`;
+ const draw=f=>{f=f.toLowerCase();
+  $("#sheet").innerHTML=S.map(s=>{const cards=s.cards.filter(c=>!f||(s.title+" "+c.k+" "+c.d).toLowerCase().includes(f));if(!cards.length)return"";
+   return `<article><h3><span>${String(s.id).padStart(2,"0")}</span><button data-go="s${s.id}" style="background:none;border:0;padding:0;font:inherit;text-align:left">${esc(s.title)}</button></h3><p>${esc(s.plain)}</p><dl>${cards.map(c=>`<dt>${esc(c.k)}</dt><dd>${esc(c.d)}</dd>`).join("")}</dl></article>`}).join("")||`<p style="color:var(--muted)">Nothing matches that search.</p>`};
+ draw("");$("#q").oninput=e=>draw(e.target.value);
+}
+
+/* ---------------- PROGRESS ---------------- */
+function renderProgress(){
+ const [,rank]=rankOf(st.xp);
+ const moves=S.filter(s=>st.ss[s.id]&&st.ss[s.id].move);
+ $("#app").innerHTML=`<div class="eyebrow">Your journey</div><h1 class="page-h">Progress</h1>
+ <p style="margin:0">${st.xp} XP · rank <b>${esc(rank)}</b> · ${st.badges.length}/${BADGES.length} badges · best Rapid Fire ${st.rapidBest}</p>
+ <div class="ranks">${RANKS.map(r=>`<span class="${st.xp>=r[0]?"on":""}">${r[1]} · ${r[0]}</span>`).join("")}</div>
+ <section class="block"><h2>Badges</h2><div class="badges">${BADGES.map(b=>`<div class="badge ${st.badges.includes(b.id)?"on":""}"><div class="hex">${esc(b.g)}</div><b>${esc(b.n)}</b><small>${esc(b.d)}</small></div>`).join("")}</div></section>
+ <section class="block"><h2>My moves</h2>
+ ${moves.length?`<div class="journal">${moves.map(s=>`<article><h3>${s.id} · ${esc(s.title)}</h3>${s.move.f.map((f,i)=>st.ss[s.id].move[i]?`<p><span>${esc(f)}</span> ${esc(st.ss[s.id].move[i])}</p>`:"").join("")}</article>`).join("")}</div><button class="btn ghost" id="copyMoves" style="margin-top:12px">Copy all moves</button> <span id="copied" class="eyebrow"></span>`:`<p style="color:var(--muted)">Your commitments from each station's Your Move step will collect here, ready to bring into pod check-ins or your Why I Lead draft.</p>`}
+ </section>
+ <section class="block"><h2>Start over</h2><p style="color:var(--muted);margin:0 0 10px">Clears XP, stars, badges and moves in this browser.</p><div id="resetBox"><button class="btn ghost" id="reset">Reset progress</button></div></section>`;
+ const cm=$("#copyMoves");if(cm)cm.onclick=()=>{const txt=moves.map(s=>`${s.id}. ${s.title}\n`+s.move.f.map((f,i)=>st.ss[s.id].move[i]?`  ${f} ${st.ss[s.id].move[i]}`:"").filter(Boolean).join("\n")).join("\n\n");
+  navigator.clipboard.writeText(txt).then(()=>$("#copied").textContent="Copied").catch(()=>{$("#copied").textContent="Copy blocked. Select the text above instead."})};
+ $("#reset").onclick=()=>{$("#resetBox").innerHTML=`<span style="margin-right:10px">This can't be undone.</span><button class="btn" id="yes" style="background:var(--bad)">Yes, reset</button> <button class="btn ghost" id="no">Cancel</button>`;
+  $("#yes").onclick=()=>{st=blank();save();renderBar();toast("Progress reset");go("trail")};$("#no").onclick=renderProgress};
+}
+
+renderBar();route();
+</script>
+
+</body>
+</html>
