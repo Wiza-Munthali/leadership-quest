@@ -32,8 +32,9 @@ The design is inspired by the hand-painted shop and barbershop signs found acros
 - XP and ranks: Newcomer → Listener → Experimenter → Builder → Weaver → Guide → Visionary
 - Up to three stars per station, based on how many answers you get right first time
 - A road that turns from dirt to tarmac as you clear stations
-- 13 badges and a daily streak
-- **Rapid Fire**: a 60-second quiz drawing on all 13 sessions
+- **The 20 Experiences deck**: all 20 cards from the Cohort Check-In as flip cards (situation on the front, reframe and reflection questions on the back), with a *Draw a card* button and "Name the moment" questions
+- 14 badges and a daily streak
+- **Rapid Fire**: a 60-second quiz drawing on all 13 sessions and the 20 Experiences deck
 - **Cheat Sheet**: every framework on one searchable page
 - **Progress**: your badges plus all your commitments, with a copy button so you can paste them into pod check-ins or your *Why I Lead* draft
 
@@ -120,7 +121,9 @@ All content lives in the `<script>` block of `index.html`, in two constants.
 { t: "order", q: "Put in order…", i: ["First", "Second", "Third"], w: "…" }
 ```
 
-Match questions support up to six pairs. Rapid Fire draws on every multiple-choice question that has three or more options.
+Match questions support up to six pairs. Rapid Fire draws on every multiple-choice question that has three or more options, plus generated questions from the deck.
+
+**`DECK`** holds the 20 Experiences cards, each as `{ t: "Title", s: ["situation", …], d: "reframe", q: ["question", …] }`. A station shows the deck when it has `deck: true` (currently station 10). Three "Name the moment" questions are generated from the deck each time that station's challenge is played.
 
 To adapt the app for a later convening, replace the entries in `S` (and `ARCS` if the camps change). The trail, scoring and badges adjust automatically. Badges that point at specific stations (Trap Spotter → station 1; Storyteller → stations 4 and 12) are defined in `checkBadges()`.
 
@@ -143,6 +146,7 @@ The content summarises the ALA 2026–27 first-convening session materials and t
 - **Mental health & psychological safety session**: facilitated by Kalunga Chalungumana (StrongMinds Zambia, GHC alum), using DISC styles
 - **MOCHA, check-ins, One-Minute email**: The Management Center
 - **Goal setting**: Locke & Latham (2002); if–then planning: Gollwitzer & Sheeran
+- **20 Experiences card set**: SYPartners, used in the Cohort Check-In session. Card titles are kept; situations, reframes and questions are paraphrased.
 
 The case studies (Peter and Nandi, Amani, Amina and others) are the fictional scenarios used in the sessions. All framework summaries are paraphrased for study purposes. For the full ideas, go to the original sources and session materials.
 

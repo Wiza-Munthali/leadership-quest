@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="A gamified study trail through the 13 sessions of the ALA 2026–27 first convening.">
+<meta name="author" content="Wiza">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='5' fill='%23F4BD1E' stroke='%23171310' stroke-width='3' transform='rotate(-6 16 16)'/%3E%3C/svg%3E">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>ALA Leadership Quest</title>
@@ -248,6 +249,50 @@ details.case p{margin:10px 0 0;max-width:65ch;font-weight:500}
 .pairs-done .arr{font-family:var(--f-display);color:var(--green)}
 @media (max-width:560px){.pairs-done .pr{grid-template-columns:auto 1fr}.pairs-done .arr{display:none}.pairs-done .pr>span:last-child{grid-column:2}}
 @media (prefers-reduced-motion:reduce){.shake{animation:none}}
+
+/* 20 Experiences deck */
+.cards.deck{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.card.dk,.card.dk .in{min-height:450px}
+.card.dk .f{background:#1C2B3A;color:#EEF3F7}
+.card.dk .f small{color:var(--yellow)}
+.card.dk .f ul{margin:14px 0 0;padding-left:18px;display:grid;gap:10px;font-size:15px;font-weight:600;line-height:1.35}
+.card.dk .f .tapf{margin-top:auto;color:#AFC0CF}
+.card.dk .b{gap:8px;font-size:13.5px}
+.card.dk .b small{font-weight:800;color:var(--muted);font-size:11.5px;letter-spacing:.06em}
+.card.dk .b h3{font-size:17px;line-height:1.2}
+.card.dk .b mark{background:linear-gradient(transparent 55%,var(--yellow) 55%);color:var(--ink);padding:0 2px}
+.card.dk .b .dd{font-weight:500}
+.card.dk .b ol{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.card.dk .b ol li{border:2px solid var(--green);border-radius:16px;padding:4px 11px;font-weight:600;font-size:13px;line-height:1.3}
+.card.dk.drawn .f,.card.dk.drawn .b{box-shadow:0 0 0 4px var(--yellow),7px 7px 0 var(--ink)}
+.card.dk.seen .f small:first-child::after{content:" · SEEN ✓"}
+
+/* match pairs: phone layout */
+.mletters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.ml{min-width:46px;height:42px;padding:0 10px;border-radius:8px;border:2.5px dashed var(--ink);background:#fff;font-family:var(--f-display);font-size:16px;color:var(--muted)}
+.ml.paired{border-style:solid;background:var(--pc);color:#fff;text-shadow:1px 1px 0 var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.ml.active{outline:3px solid var(--ink);outline-offset:2px;background:var(--yellow);color:var(--ink);text-shadow:none;border-style:solid}
+.ml.ok{background:var(--green);color:#fff}
+.ml.bad{background:var(--red);color:#fff}
+.mcur{display:flex;gap:12px;align-items:center;background:var(--pt,var(--wall));border:2.5px solid var(--pc,var(--ink));border-left-width:10px;border-radius:8px;padding:12px 14px;box-shadow:3px 3px 0 var(--pc,var(--ink));margin-bottom:8px}
+.mcur small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mcur b{font-size:16px;line-height:1.3}
+.mcur.all{--pc:var(--ink);--pt:var(--wall)}
+.msum{margin-top:14px;border:2px solid var(--ink);border-radius:8px;padding:10px 12px;background:var(--wall)}
+.msum summary{font-weight:800;font-size:14px;cursor:pointer}
+.mrow{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;margin-top:10px;font-size:14px}
+.mrow .arr{display:none}
+.mrow span:last-child{grid-column:2;color:var(--muted)}
+
+/* footer signature */
+.foot{border-top:4px solid var(--ink);background:var(--wall-2);margin-top:20px}
+.foot .wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding-block:22px calc(28px + env(safe-area-inset-bottom,0px))}
+.sig{display:inline-flex;flex-direction:column;align-items:flex-start;background:var(--red);color:#fff;border:var(--ol);border-radius:8px;padding:8px 16px 10px;box-shadow:4px 4px 0 var(--ink);transform:rotate(-2deg)}
+.sig small{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow)}
+.sig b{font-family:var(--f-display);font-weight:400;font-size:24px;line-height:1.1;text-shadow:2px 2px 0 var(--ink)}
+.sig span{font-size:12px;font-weight:700}
+.foot p{margin:0;flex:1;min-width:220px;max-width:56ch;font-size:13.5px;font-weight:500;color:var(--muted)}
+main{padding-block:26px 40px}
 </style>
 </head>
 <body>
@@ -268,6 +313,10 @@ details.case p{margin:10px 0 0;max-width:65ch;font-weight:500}
   </div>
 </header>
 <main class="wrap" id="app"></main>
+<footer class="foot"><div class="wrap">
+  <div class="sig"><small>By</small><b>Wiza</b><span>ALA 2026–27 Fellow</span></div>
+  <p>An unofficial study aid made by a fellow, for fellows.</p>
+</div></footer>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div id="modalRoot"></div>
 
@@ -492,7 +541,7 @@ move:{prompt:"Name your under-pressure default.",f:["My under-pressure default",
 {id:10,arc:2,short:"Peer Support",title:"Cohort Check-In: 20 Experiences",
 plain:"Peers can help you think, not just hand you advice. In a structured peer turn you describe a challenge and say what kind of help you want. Others ask questions first and only suggest ideas with permission. Look for bright spots: things already working, even a little.",
 hook:"Ask for the help you actually want: an ear, questions, ideas or a challenge.",
-src:"Uses the 20 Experiences card set. Cards are yours to keep for pod reflection.",
+src:"Uses the 20 Experiences card set (SYPartners). The full deck is further down this page.",
 cards:[
  {k:"The five-minute peer turn",d:"Describe the situation and your request (2 min) → Clarifying questions (1) → Suggestions with permission (1) → Speaker reflects (1).",q:"Did I ask before advising?"},
  {k:"Ask for the right help",d:"Listening, questions, ideas or a constructive challenge. Saying which one you want makes the help useful.",q:"What do I need today?"},
@@ -500,7 +549,8 @@ cards:[
  {k:"Your influence",d:"Separate what you can decide from what needs other people, resources or approval.",q:"Which part is mine to act on?"},
  {k:"Ground rules",d:"Keep stories with their owner. Passing is welcome. Advice needs permission.",q:"Is this my story to share?"}
 ],
-cs:{name:"How the session ran",text:"Fellows browsed 20 leadership-experience cards, picked one that matched a current challenge, wrote a short request for support, then took equal five-minute turns in groups of four."},
+deck:true,
+cs:{name:"How the session ran",text:"Fellows browsed the 20 Experiences cards, picked one that matched a current challenge, wrote a short request for support, then took equal five-minute turns in groups of four. The full deck is on this page: draw a card or find the one that fits where you are."},
 quiz:[
  {t:"order",q:"Put the five-minute peer turn in order.",i:["Describe the situation and request (2 min)","Clarifying questions (1 min)","Suggestions, with permission (1 min)","Speaker reflects (1 min)"],w:"Understand before you suggest, and let the speaker have the last word."},
  {t:"mcq",q:"What's a bright spot?",o:["Something already working, even a little, while the wider problem continues","A success story from another country","The best idea in the cohort","A fully solved problem"],a:0,w:"Bright spots show you conditions you can copy or adapt."},
@@ -591,10 +641,58 @@ const BADGES=[
  {id:"perfect",g:"★",n:"Flawless",d:"Every answer right first time on a station"},
  {id:"flip",g:"◐",n:"Card Turner",d:"Turn every card in 5 stations"},
  {id:"commit",g:"✓",n:"Committed",d:"Write 5 Your Move commitments"},
+ {id:"deck",g:"20",n:"Full Deck",d:"Flip all 20 Experiences cards"},
  {id:"rapid",g:"10",n:"Quick Thinker",d:"Score 10+ in Rapid Fire"},
  {id:"streak",g:"3",n:"On a Roll",d:"Play 3 days in a row"},
  {id:"trail",g:"13",n:"Full Trail",d:"Clear all 13 stations"}
 ];
+
+const DECK=[
+{t:"Fuel the movement",s:["The groundwork is done; now we need more people involved.","We've hit a dead end and need a wider network of advocates and funders.","This idea is worth spreading and I want people excited to join in."],d:"Movements push for concrete change but run on emotion and belief. Build belief in new partners and invite them in.",q:["What kinds of partners does the movement need at this stage?","Can I map out how we'll invite people in, and the role each will play?","Can I tell our movement's story in a powerful way?","Can I convince someone why this work matters, here and now?"]},
+{t:"See the broader system",s:["I keep being surprised by information I didn't know mattered.","Things are more tangled and connected than I thought.","People raise objections I never saw coming, and I'm lost in the details."],d:"Deep in the weeds, you only see part of the picture. Zooming out shows all the forces at play, so you can decide more strategically.",q:["Can I sketch every part of the system and how the parts connect?","Have I considered all the stakeholders involved?","Could I explain the system to someone else?","What are my biggest blind spots?"]},
+{t:"Get grounded in this reality",s:["This culture is very different from what I'm used to.","My ideas keep getting “that won't work here.”","The problems I came to solve aren't the ones people are actually facing."],d:"We all bring our own beliefs and biases. Real collaboration needs a deep understanding of other people's perspectives, and empathy helps you adjust and contribute.",q:["Have I let teammates explain where their ideas come from?","Do I know the real challenges of the people I serve?","What am I assuming, and what should I be asking?","Could I shadow someone to understand their day-to-day reality?"]},
+{t:"Own and embrace failure",s:["Things didn't go as well as I'd hoped.","I feel I've let the team down and don't know what to do.","Our plan fell through and we're back at square one."],d:"Everyone misses sometimes. The strongest leaders treat failure as a lesson that moves them forward instead of holding them back.",q:["What went wrong, and why?","What went right, and why?","What would I do differently next time?","Who can I ask for feedback or guidance?"]},
+{t:"Get feedback, grow, repeat",s:["Someone told me what to work on, and it felt awkward.","I got negative feedback and I'm unsure what to do next.","I've hit a milestone and want to know how I'm doing."],d:"Collaboration needs feedback, even when it's uncomfortable. Prepare for these conversations and stay open, so feedback improves you and your work.",q:["What feedback am I looking for right now, and from whom?","Do I get defensive, or do I stay open?","Do I acknowledge my emotions or push them down?","Can I build a plan forward with the people who gave me feedback?"]},
+{t:"Prototype ideas into reality",s:["I explained my solution, but it didn't win the team over.","We're afraid the idea might fail.","We talk and debate a lot but never actually make anything."],d:"Everyone gets stuck. Prototyping means making the idea real (a sketch, a flowchart, a mock-up) so you can test it fast, improve it and win support.",q:["Can I sketch, diagram, storyboard or role-play the idea?","Can I make something rough and cheap to get quick feedback?","Who should I test it with?","Is there another way to achieve the same intent even better?"]},
+{t:"Command attention and make your case",s:["I'm trying to explain our work to new audiences and don't know where to start.","My funding asks aren't landing.","I'm building a coalition, but people aren't persuaded."],d:"Building belief in your work can matter as much as the work itself. Work out what the moment needs and which story will win hearts and minds.",q:["Where is this audience coming from, mentally and emotionally?","Do I understand their goals and constraints?","Can I paint a picture of the future and why it matters to them?","What would help them see a way forward: a plan, a budget, the team?"]},
+{t:"Get creative with constraints",s:["Our timeline was cut and we can't do everything we planned.","We don't have enough resources to do this well.","We keep recycling the same old ideas."],d:"Constraints narrow your choices, and that can spark new ideas. Lead with optimism and treat limited time or money as a creative brief.",q:["Can I frame this challenge more positively to unlock new thinking?","Can we challenge our assumptions to revive ideas we dismissed?","Have I made the most of what I have, and prioritised well?","What resources or support haven't I considered yet?"]},
+{t:"Amplify the power of networks",s:["I'd love advice from someone who's been through this.","We'd do much better with a subject-matter expert.","I'm heading to an event full of people interested in our work."],d:"Big problems need many people's capabilities. Great leaders build and tend their relationships to keep their networks strong.",q:["Who has the expertise I'm looking for?","Who is willing and able to introduce me to others?","Which GHC alumni could offer mentorship or connections?","Which relationship can I nurture this week with a call, email or note?"]},
+{t:"Lead your leaders",s:["I want to help my manager succeed, but I'm not sure I am.","My new managers and I aren't gelling yet.","I share ideas with my manager but don't feel heard."],d:"Work is easier with a healthy relationship with your boss. Thinking about how to work well with the people who manage you (managing up) helps everyone succeed.",q:["What have I learned about what makes my manager tick?","Can I anticipate their needs and stay a step ahead?","What else is on their plate right now?","Do I know how to disagree constructively and give them feedback?"]},
+{t:"Manufacture momentum",s:["We came to reinvent the system but found good things already working.","Our team just had a breakthrough.","We've refined an idea and want to spread it to new places."],d:"Good problem-solvers notice what's right as well as what's wrong, so they can scale what works and multiply their impact.",q:["What's great about this process that's worth scaling elsewhere?","Can I spot quick wins and early evidence that change is working?","Who on the team or in the community is doing outstanding work?","What's happening here that I should shine a light on?"]},
+{t:"Connect to people through story",s:["I spoke to a big group, but my point didn't land.","When I present, people seem bored.","I keep turning down opportunities because public speaking makes me nervous."],d:"Public speaking is daunting but essential. Connecting with your audience, instead of talking at them, lets you share ideas more authentically.",q:["Can I tailor my story to the people in this audience?","What personal anecdote could help me connect?","Can I build in moments that make it a two-way conversation?","Can I meet audience members beforehand to break the ice?"]},
+{t:"See (and hack) the system",s:["I'm trying to bring in a new idea, but it isn't sticking.","I keep hitting roadblocks; it's like swimming upstream.","I need to understand how change happens here before I can contribute."],d:"You rarely get to start from scratch. Investigate the existing structures carefully, then find creative ways to innovate inside them.",q:["Can I picture the system I'm joining and how it fits together?","What rituals and habits, spoken and unspoken, should I respect?","Where are the friction and pain points worth addressing?","Which forces in this system work for me, and which against me?"]},
+{t:"Design for success",s:["A big event is coming and I'm meant to keep it on track.","There are many moving parts and it feels disorganised.","We're starting something new and I want a head start on planning."],d:"Collaboration depends on team dynamics, clear roles, metrics and communication. Great leaders design those conditions deliberately, at the start and along the way.",q:["Do I know what success looks like and how we'll measure it?","Can I map how the work will get done over time?","Are roles clear, and how will accountability work?","Do we have a plan for sharing updates and making decisions?"]},
+{t:"Cast an ensemble team",s:["We're starting a new challenge and need the right mix of people.","We seem to be missing a key skill.","I see a great opportunity for someone near me to get involved."],d:"People are often assigned by job title. Great leaders look deeper, at each person's talents, passions and superpowers, for better work and more growth.",q:["What skills and energy does this work need?","What are the unique capabilities of the people around me?","What superpower do I bring, and what would complement it?","Which pairs would thrive together on this team?"]},
+{t:"Tame tension and conflict",s:["I'm caught in the crossfire between two sides.","We disagree constantly and it's hard to move forward.","People look to me to ease the tension."],d:"Little progress happens when people are at odds. Great leaders stay calm and use peacemaking and negotiation skills to help people find common ground.",q:["Do I know the root of the disagreement?","Have I taken time to fully understand a view that isn't mine?","Can I play back what I'm hearing so everyone's on the same page?","Can I surface where we agree, so we can settle one next step?"]},
+{t:"Lead into the unknown",s:["Our project took an unexpected turn and nothing is clear.","I expected more direction, but I have to figure it out myself.","Everyone's looking to me, but I don't have all the answers."],d:"New work brings ambiguity. Instead of letting fear stop them, strong leaders imagine what could be and move forward with a point of view.",q:["Can I list the knowns and the unknowns?","What's my best working hypothesis?","Which past experiences might shed light on this?","How could I learn fast: a quick survey, an interview, a prototype?"]},
+{t:"Move and mobilize with a powerful vision",s:["People don't seem to get why this work matters.","We're excited but disagree about what we're trying to achieve.","The team is worn down by the daily grind and needs the bigger picture."],d:"On a new path, people need a North Star. A vivid picture of where you're going and why helps people move in the right direction and make good choices.",q:["Can I describe what a better future looks like?","Is it clear why this work matters, here and now?","Can I explain the key shifts we're making, from what to what?","Can I tell the vision as a story that moves both heart and head?"]},
+{t:"Focus on the next right move",s:["I have too much on my plate and feel overwhelmed.","People keep asking for help and I want to say yes to everyone.","Everything feels urgent and I'm scared of getting it wrong."],d:"When everything feels important, pause to see what really serves the bigger picture. When many moves are unclear, take the next one you feel sure about.",q:["Can I step back and write down everything on my plate?","What serves the bigger picture, and what can drop down the list?","Can I ask for help to share the load or work smarter?","What's one next move I feel confident about?"]},
+{t:"Lead with humanity",s:["I'm leading a team for the first time and unsure what to do.","We only talk about to-dos and logistics; it feels transactional.","I know my team is capable of more than I'm getting."],d:"Command and control only goes so far, especially when stakes are high and the future is unclear. The best leaders connect with their people's humanity, starting with their own.",q:["Can I share a personal story about why this work matters to me?","Where can I coach or share what I've learned?","Do I know each person's unique strengths and passions?","What conditions does each person need to do their best?"]}
+];
+function deckQ(n){
+ return shuffle(DECK.map((_,i)=>i)).slice(0,n).map(i=>{
+  const c=DECK[i],others=shuffle(DECK.map((_,j)=>j).filter(j=>j!==i)).slice(0,3);
+  return {t:"mcq",q:`“${c.s[Math.floor(Math.random()*c.s.length)]}” Which card is this a moment to…`,o:[c.t,...others.map(j=>DECK[j].t)],a:0,w:`This is a moment to ${c.t.toLowerCase()}. ${c.d}`,from:"20 Experiences"};
+ });
+}
+function deckHTML(){
+ const seen=st.deck||[];
+ return `<section class="block" id="deckSec"><h2><span class="tag">THE DECK</span>The 20 Experiences cards <span class="eyebrow" id="deckCount">${seen.length}/20 seen</span></h2>
+ <p style="margin:0 0 14px;max-width:62ch;font-weight:500">Read the situation on the front. If it sounds like where you are, flip it over for a new way to look at it and four questions to reflect on.</p>
+ <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"><button class="btn copper" id="drawCard" type="button">Draw a card</button><button class="btn ghost" id="closeAll" type="button">Turn all face down</button></div>
+ <div class="cards deck" id="deck">${DECK.map((c,i)=>`<button class="card dk ${seen.includes(i)?"seen":""}" data-d="${i}" aria-label="Experience card ${i+1}"><span class="in"><span class="f"><small>THE SITUATION · ${i+1}/20</small><ul>${c.s.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><small class="tapf">Tap to flip</small></span><span class="b"><small>This is a moment to:</small><h3><mark>${esc(c.t)}</mark></h3><span class="dd">${esc(c.d)}</span><ol>${c.q.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></span></span></button>`).join("")}</div>
+ <p class="src">Adapted from the 20 Experiences card set (SYPartners) used in the Cohort Check-In session. Wording paraphrased.</p></section>`;
+}
+function wireDeck(){
+ if(!st.deck)st.deck=[];
+ const all=document.querySelectorAll("#deck .card");
+ const see=i=>{if(!st.deck.includes(i)){st.deck.push(i);save();$("#deckCount").textContent=`${st.deck.length}/20 seen`;
+  if(st.deck.length===20)addXP(10,"full deck seen");else checkBadges()}};
+ all.forEach(c=>c.onclick=()=>{c.classList.toggle("flip");const i=+c.dataset.d;c.classList.add("seen");see(i)});
+ $("#drawCard").onclick=()=>{all.forEach(c=>c.classList.remove("flip","drawn"));const i=Math.floor(Math.random()*20),c=all[i];
+  c.classList.add("drawn");c.scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>{c.classList.add("flip","seen");see(i)},450)};
+ $("#closeAll").onclick=()=>all.forEach(c=>c.classList.remove("flip","drawn"));
+}
 
 /* ---------------- STATE ---------------- */
 const KEY="alaQuest.v1";
@@ -623,6 +721,7 @@ function checkBadges(){
   flip:()=>S.filter(s=>st.ss[s.id]&&st.ss[s.id].flipped.length>=s.cards.length).length>=5,
   commit:()=>Object.values(st.ss).filter(x=>x.move).length>=5,
   rapid:()=>st.rapidBest>=10,
+  deck:()=>(st.deck||[]).length>=20,
   streak:()=>st.streak>=3,
   trail:()=>S.every(s=>done(s.id))
  };
@@ -726,6 +825,7 @@ function renderStation(id){
   <div class="cards" id="cards">${s.cards.map((c,i)=>`<button class="card c${i%4} ${me.flipped.includes(i)?"seen":""}" data-i="${i}" aria-label="Flip card: ${esc(c.k)}"><span class="in"><span class="f"><small>CARD ${i+1}/${s.cards.length}</small><h3>${esc(c.k)}</h3><small>Tap to flip</small></span><span class="b"><span>${esc(c.d)}</span>${c.q?`<em>Ask: ${esc(c.q)}</em>`:""}</span></span></button>`).join("")}</div>
  </section>
 
+ ${s.deck?deckHTML():""}
  <section class="block"><h2><span class="tag">STEP 3</span>The case from the session</h2>
   <details class="case"><summary>${esc(s.cs.name)}</summary><p>${esc(s.cs.text)}</p></details>
  </section>
@@ -750,11 +850,13 @@ function renderStation(id){
   const first=!me.move;me.move=vals;save();$("#mvSaved").textContent="Saved";
   e.target.querySelector("button").textContent="Update my move";
   if(first)addXP(15,"commitment saved");else{toast("Move updated");checkBadges()}};
+ if(s.deck)wireDeck();
  startQuiz(s);
 }
 
 function startQuiz(s){
- Q={s,i:0,res:s.quiz.map(()=>null),first:true,state:{}};
+ const qs=s.deck?s.quiz.concat(deckQ(3)):s.quiz;
+ Q={s:Object.assign({},s,{quiz:qs}),orig:s,i:0,res:qs.map(()=>null),first:true,state:{}};
  renderQ();
 }
 function pips(){return `<div class="pips">${Q.s.quiz.map((_,i)=>`<i class="${Q.res[i]===true?"ok":Q.res[i]===false?"meh":i===Q.i?"cur":""}"></i>`).join("")}</div>`}
@@ -784,24 +886,41 @@ function mcqUI(q){
 }
 function matchUI(q){
  const R=shuffle(q.p.map((_,i)=>i));const pair={};const locked=new Set();let flash={};let sel=0;
- const L="ABCDEF";
+ const L="ABCDEF";const mq=window.matchMedia("(max-width:600px)");
  const tag=i=>`<span class="pt p${i}">${L[i]}</span>`;
  const mark=i=>flash[i]==="bad"?'<span class="res bad" aria-label="wrong">✗</span>':locked.has(i)?'<span class="res ok" aria-label="correct">✓</span>':"";
+ const nextOpen=()=>{const n=q.p.findIndex((_,i)=>pair[i]===undefined);return n<0?null:n};
+ const assign=j=>{
+  const o=Object.keys(pair).map(Number).find(l=>pair[l]===j);
+  if(o!==undefined&&locked.has(o))return;
+  if(sel===null||sel===undefined){if(o!==undefined){delete pair[o];sel=o;draw()}else $("#qhint").textContent="Pick an item first";return}
+  if(o===sel){delete pair[sel];draw();return}
+  if(o!==undefined)delete pair[o];
+  pair[sel]=j;sel=nextOpen();draw();
+ };
  const draw=()=>{
+  if(!document.getElementById("qbody"))return;
   if(Q.solved){
    $("#qbody").innerHTML=`<div class="pairs-done">${q.p.map((p,i)=>`<div class="pr">${tag(i)}<b>${esc(p[0])}</b><span class="arr">→</span><span>${esc(p[1])}</span></div>`).join("")}</div>`;return}
   const owner={};Object.entries(pair).forEach(([l,r])=>owner[r]=+l);
-  $("#qbody").innerHTML=`<p class="mhelp">Tap a left item, then the answer that matches it. Matched pairs share a colour and a letter.</p><div class="match"><div class="col">${q.p.map((p,i)=>{const on=pair[i]!==undefined;
+  if(mq.matches){
+   /* phone: one term at a time */
+   const cur=sel===null||sel===undefined?null:sel;
+   $("#qbody").innerHTML=`<div class="mletters" role="group" aria-label="Items to match">${q.p.map((p,i)=>`<button class="ml ${pair[i]!==undefined?"paired p"+i:""} ${cur===i?"active":""} ${flash[i]==="bad"?"shake bad":""} ${locked.has(i)?"ok":""}" data-l="${i}" aria-label="Item ${L[i]}: ${esc(p[0])}">${L[i]}${locked.has(i)?"✓":flash[i]==="bad"?"✗":""}</button>`).join("")}</div>
+   ${cur!==null?`<div class="mcur p${cur}">${tag(cur)}<div><small>Match this:</small><b>${esc(q.p[cur][0])}</b></div></div><p class="mhelp">Tap the answer that goes with <b>${L[cur]}</b>.</p>`
+    :`<div class="mcur all"><div><small>All items matched</small><b>Press Check, or tap a letter above to change a match.</b></div></div>`}
+   <div class="opts">${R.map(j=>{const o=owner[j];const on=o!==undefined;
+    return `<button class="opt mt ${on?"paired p"+o:""} ${on&&locked.has(o)?"lock":""} ${on&&flash[o]==="bad"?"shake":""}" data-r="${j}" ${on&&locked.has(o)?"disabled":""}>${on?tag(o):'<span class="pt empty">?</span>'}<span class="tx">${esc(q.p[j][1])}</span>${on?mark(o):""}</button>`}).join("")}</div>
+   ${Object.keys(pair).length?`<details class="msum"><summary>My matches so far (${Object.keys(pair).length}/${q.p.length})</summary>${q.p.map((p,i)=>pair[i]!==undefined?`<div class="mrow">${tag(i)}<span>${esc(p[0])}</span><span class="arr">→</span><span>${esc(q.p[pair[i]][1])}</span></div>`:"").join("")}</details>`:""}`;
+  }else{
+   $("#qbody").innerHTML=`<p class="mhelp">Tap a left item, then the answer that matches it. Matched pairs share a colour and a letter.</p><div class="match"><div class="col">${q.p.map((p,i)=>{const on=pair[i]!==undefined;
     return `<button class="opt mt ${on?"paired p"+i:""} ${sel===i&&!on?"picking":""} ${locked.has(i)?"lock":""} ${flash[i]==="bad"?"shake":""}" data-l="${i}" ${locked.has(i)?"disabled":""}>${tag(i)}<span class="tx">${esc(p[0])}</span>${mark(i)}</button>`}).join("")}</div>
    <div class="col r">${R.map(j=>{const o=owner[j];const on=o!==undefined;
     return `<button class="opt mt ${on?"paired p"+o:""} ${on&&locked.has(o)?"lock":""} ${on&&flash[o]==="bad"?"shake":""}" data-r="${j}" ${on&&locked.has(o)?"disabled":""}>${on?tag(o):'<span class="pt empty">?</span>'}<span class="tx">${esc(q.p[j][1])}</span>${on?mark(o):""}</button>`}).join("")}</div></div>`;
-  document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{if(Q.solved)return;const i=+b.dataset.l;if(locked.has(i))return;
-   if(pair[i]!==undefined){delete pair[i]}sel=i;flash={};draw()});
-  document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{if(Q.solved)return;const j=+b.dataset.r;flash={};
-   const o=Object.keys(pair).map(Number).find(l=>pair[l]===j);
-   if(o!==undefined){if(locked.has(o))return;delete pair[o];sel=o;draw();return}
-   if(sel===null||sel===undefined){$("#qhint").textContent="Pick an item on the left first";return}
-   pair[sel]=j;sel=q.p.findIndex((_,i)=>pair[i]===undefined);if(sel<0)sel=null;draw()});
+  }
+  document.querySelectorAll("#qbody [data-l]").forEach(b=>b.onclick=()=>{if(Q.solved)return;const i=+b.dataset.l;if(locked.has(i))return;
+   if(!mq.matches&&pair[i]!==undefined)delete pair[i];sel=i;flash={};draw()});
+  document.querySelectorAll("#qbody [data-r]").forEach(b=>b.onclick=()=>{if(Q.solved)return;flash={};assign(+b.dataset.r)});
   const full=Object.keys(pair).length===q.p.length;
   $("#qhint").textContent=full?"All matched. Press Check.":`${Object.keys(pair).length} of ${q.p.length} matched`;
   $("#qact").innerHTML=`<button class="btn" id="chk" ${full?"":"disabled"}>Check</button>`;
@@ -814,6 +933,7 @@ function matchUI(q){
    setTimeout(()=>{wrong.forEach(i=>delete pair[i]);flash={};sel=wrong[0];if(!Q.solved)draw()},1400);
   };
  };
+ mq.onchange=()=>{if(!Q.solved)draw()};
  draw();
 }
 function orderUI(q){
@@ -841,14 +961,14 @@ function finishQuiz(){
  if(!wasDone){xp=firsts*10+(n-firsts)*4}else if(stars>oldStars){xp=(stars-oldStars)*10}
  me.done=true;me.stars=Math.max(oldStars,stars);if(firsts===n)me.perfect=true;save();
  $("#quiz").innerHTML=`${pips()}<div class="done-card"><div class="eyebrow">Station ${s.id} cleared</div>${starRow(stars,"big-stars")}<h3>${firsts}/${n} right first time</h3><p style="color:var(--muted);max-width:44ch;margin:8px auto 16px">${stars===3?"Excellent. You've got this one.":stars===2?"Solid. Replay later to lock in the last star.":"A start. Re-read the cards, then replay."}${wasDone&&stars<=oldStars?" (Best so far: "+oldStars+" stars.)":""}</p><button class="btn ghost" id="replay">Replay challenge</button></div>`;
- $("#replay").onclick=()=>startQuiz(s);
+ $("#replay").onclick=()=>startQuiz(Q.orig||s);
  // refresh header stars
  const hs=document.querySelector(".st-head .stars");if(hs)hs.outerHTML=starRow(me.stars);
  if(xp)addXP(xp,`station ${s.id}`);else{renderBar();checkBadges()}
 }
 
 /* ---------------- RAPID FIRE ---------------- */
-function rfPool(){const out=[];S.forEach(s=>s.quiz.forEach(q=>{if(q.t==="mcq"&&q.o.length>2)out.push({...q,from:s.short})}));return shuffle(out)}
+function rfPool(){const out=[];S.forEach(s=>s.quiz.forEach(q=>{if(q.t==="mcq"&&q.o.length>2)out.push({...q,from:s.short})}));return shuffle(out.concat(deckQ(8)))}
 function renderRapid(){
  $("#app").innerHTML=`<div class="rf" id="rf"><div class="eyebrow">Arcade</div><h1 style="font-size:32px;margin:6px 0 10px">Rapid Fire</h1>
  <p style="color:var(--muted);margin:0 0 16px">60 seconds. Questions from all 13 sessions. Each right answer scores a point; each wrong answer costs 3 seconds.</p>
@@ -884,7 +1004,9 @@ function renderSheet(){
  <div class="sheet" id="sheet"></div>`;
  const draw=f=>{f=f.toLowerCase();
   $("#sheet").innerHTML=S.map(s=>{const cards=s.cards.filter(c=>!f||(s.title+" "+c.k+" "+c.d).toLowerCase().includes(f));if(!cards.length)return"";
-   return `<article><h3><span>${String(s.id).padStart(2,"0")}</span><button data-go="s${s.id}" style="background:none;border:0;padding:0;font:inherit;text-align:left">${esc(s.title)}</button></h3><p>${esc(s.plain)}</p><dl>${cards.map(c=>`<dt>${esc(c.k)}</dt><dd>${esc(c.d)}</dd>`).join("")}</dl></article>`}).join("")||`<p style="color:var(--muted)">Nothing matches that search.</p>`};
+   return `<article><h3><span>${String(s.id).padStart(2,"0")}</span><button data-go="s${s.id}" style="background:none;border:0;padding:0;font:inherit;text-align:left">${esc(s.title)}</button></h3><p>${esc(s.plain)}</p><dl>${cards.map(c=>`<dt>${esc(c.k)}</dt><dd>${esc(c.d)}</dd>`).join("")}</dl></article>`}).join("")||`<p style="color:var(--muted)">Nothing matches that search.</p>`;
+  const dk=DECK.filter(c=>!f||(c.t+" "+c.d+" 20 experiences").toLowerCase().includes(f));
+  if(dk.length)$("#sheet").insertAdjacentHTML("beforeend",`<article><h3><span>20</span><button data-go="s10" style="background:none;border:0;padding:0;font:inherit;text-align:left">The 20 Experiences deck</button></h3><p>Each card names a moment every change leader meets, with a way to reframe it.</p><dl>${dk.map(c=>`<dt>${esc(c.t)}</dt><dd>${esc(c.d)}</dd>`).join("")}</dl></article>`)};
  draw("");$("#q").oninput=e=>draw(e.target.value);
 }
 
